@@ -1,0 +1,338 @@
+---
+title: "MNE-Python"
+editor: visual
+format: 
+  revealjs:
+    slide-number: true
+    preview-links: auto
+    title-slide-attributes:
+      data-background-image: mne_logo.svg
+      data-background-size: 1200px
+      data-background-opacity: '0.2'
+      data-background-position: top
+editor_options: 
+  chunk_output_type: console
+---
+
+::: r-fit-text
+> Your closest\
+> collaborator is\
+> you six months ago\
+> but you don't reply to email.
+:::
+
+::: footer
+### **Karl Broman**
+:::
+
+# Why Code?
+
+## Why Code?
+
+-   Adaptability
+  
+-   Flexibility 
+  
+-   Integration 
+  
+-   Repeatability 
+  
+-   Reusability 
+  
+-   Sharability 
+
+
+------------------------------------------------------------------------
+
+## Where to Code?
+
+-   Laptop / Desktop
+
+![](IMG-1945.jpg){.absolute top=50 right=50  height="250"}
+
+------------------------------------------------------------------------
+
+## Where to Code?
+
+-   Laptop / Desktop
+-   Remote Environments
+
+![](IMG-1945.jpg){.absolute top=50 right=50  height="250"}
+![](IMG-2468_c.jpg){.absolute bottom=0 right=50  height="250"}
+
+------------------------------------------------------------------------
+
+## Where to Code?
+
+-   Laptop / Desktop
+-   Remote Environments
+-   Hipergator Cluster
+
+::: {.fragment}
+::: {.fragment .fade-up .highlight-blue }
+Not limited by software or hardware related to intellectual property licensing
+:::
+::: {.fragment}
+![](cats_boxes_giphy.gif){.absolute bottom=0 left=0  height="250"}
+:::
+:::
+
+![](IMG-1945.jpg){.absolute top=50 right=50  height="250"}
+![](IMG-2468_c.jpg){.absolute bottom=0 right=50  height="250"}
+
+
+## Code, How?
+
+- *Adapt* example code directly from MNE documentation
+- *Flexibly* accommodate new datatypes & formats
+- *Integrate* extensive python libraries & solutions from others
+- *Repeat* analysis with additional data or with changes to initial steps for reanalyzing the same data
+- *Reuse* with minor modifications for similar data 
+- *Share* with others so they can modify, repeat, reuse, and build on code
+
+
+------------------------------------------------------------------------
+
+## Return on Investment
+
+| Advantages                      | Limitations                         |
+|---------------------------------|-------------------------------------|
+| High Customization              | Increased User Knowledge Dependence |
+| High Composability              | Reduced Usability                   |
+| Graphical Resource Independence | Explicit Command Requirement        |
+| Integration & Modularity        |                                     |
+| Utility of Scale                |                                     |
+| Searchability                   |                                     |
+
+------------------------------------------------------------------------
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px;"}
+![](cat-box.gif)
+:::
+
+
+
+
+------------------------------------------------------------------------
+
+
+## MNE-Python Design Philosophy
+
+#### Interactive versus scripted analysis
+
+#### Integration with the scientific python stack
+
+#### Submodule-based organization
+
+#### Unified Application Program Interface (API)
+
+#### In-place operation
+
+------------------------------------------------------------------------
+
+## MNE: Modes of analysis {.smaller}
+
+::: columns
+::: {.column width="50%"}
+### *Interactive-mode*
+
+-   GUI-like interactive\
+    plotting & exploration
+-   Raw and Derived Data Browsing
+    -   Click to mark bad channels
+    -   Click-and-dragging to annotate bad temporal spans
+:::
+
+::: {.column width="50%"}
+### *Scripted-mode*
+
+-   Analysis pipeline composed of Python script(s).
+-   Scripts act as a record of everything in analysis
+    -   Facilitates informed adjustment of analysis
+
+    -   Facilitates refactoring, reuse, and sharing
+:::
+:::
+
+------------------------------------------------------------------------
+
+### MNE: Scientific Python Stack Integration
+
+-   MNE-Python data objects as `NumPy` arrays facilitates:
+    -   Making custom algorithms
+    -   Moving data into one of [scikit-learn's](https://scikit-learn.org/stable/) machine learning pipelines
+-   Customization of MNE-Python plots
+    -   `matplotlib`
+    -   `PyVista`'s plotting commands
+
+::: {style="text-align: center; margin-bottom: 1em"}
+[Matplotlib: Visualization with Python](https://matplotlib.org/){preview-link="true" style="text-align: center"}
+:::
+
+::: footer
+Learn more: [scikit-learn](https://scikit-learn.org/stable/)
+:::
+
+------------------------------------------------------------------------
+
+## MNE: Submodule-based organization
+
+*Organizing principles:*
+
+-   Sub-module groupings of objects and functions
+
+-   Import sub-modules directly
+
+-   Use sub-module name to access its functions
+
+-   Instances of object classes can:
+
+    -   be passed between functions within sub-module\
+    -   be passed to functions from other sub-modules that will receive the data object
+
+------------------------------------------------------------------------
+
+## MNE: Unified API
+
+### (Application Program Interface)
+
+#### ...context allows a program to exchange information
+
+-   APIs expose and receive only certain information.\
+-   There isn't a difference between whether the information is received from or shared with a human-user or another program.
+
+------------------------------------------------------------------------
+
+## MNE-Python: In-place operation
+
+-   MNE functions are designed to avoid loading data until necessary.
+    -   This allows a low in-memory footprint.
+    -   `NumPy` has extensive
+-   When data are loaded opertations are performed directly on variables unless the data are explicitly copied.
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+::: {style="text-align: center; margin-top: 1em"}
+[Migrating from EEGLAB to MNE-Python](https://mne.tools/stable/overview/migrating.html){preview-link="true" style="text-align: center"}
+:::
+
+------------------------------------------------------------------------
+
+::: {style="text-align: center; margin-top: 1em"}
+[Input - Output](https://mne.tools/stable/auto_examples/index.html#input-output){preview-link="true" style="text-align: center"}
+:::
+
+------------------------------------------------------------------------
+
+::: {style="text-align: center; margin-top: 1em"}
+[Installing MNE-Python](https://mne.tools/stable/install/index.html){preview-link="true" style="text-align: center"}
+:::
+
+------------------------------------------------------------------------
+
+::: {style="text-align: center; margin-top: 1em"}
+[MNE-Python](https://mne.tools/stable/auto_examples/index.html#preprocessing){preview-link="true" style="text-align: center"}
+:::
+
+------------------------------------------------------------------------
+
+::: {style="text-align: center; margin-top: 1em"}
+[Raw: Working wth Continuous Data](https://mne.tools/stable/auto_tutorials/index.html#working-with-continuous-data){preview-link="true" style="text-align: center"}
+:::
+
+------------------------------------------------------------------------
+
+::: {style="text-align: center; margin-top: 1em"}
+[Epochs: Segmenting Data into Epochs](https://mne.tools/stable/auto_tutorials/index.html#segmenting-continuous-data-into-epochs){preview-link="true" style="text-align: center"}
+:::
+
+------------------------------------------------------------------------
+
+::: {style="text-align: center; margin-top: 1em"}
+[Evoked: Estimating Evoked Responses](https://mne.tools/stable/auto_tutorials/index.html#estimating-evoked-responses){preview-link="true" style="text-align: center"}
+:::
+
+------------------------------------------------------------------------
+
+::: {style="text-align: center; margin-top: 1em"}
+[MNE-Python: Preprocessing Tutorials](https://mne.tools/stable/auto_tutorials/index.html#preprocessing){preview-link="true" style="text-align: center"}
+:::
+
+------------------------------------------------------------------------
+
+::: {style="text-align: center; margin-top: 1em"}
+[MNE-Python: Introductory Tutorials](https://mne.tools/stable/auto_tutorials/index.html#introductory-tutorials){preview-link="true" style="text-align: center"}
+:::
+
+------------------------------------------------------------------------
+
+## python {.smaller}
+
+For a demonstration of a line plot on a polar axis, see @fig-polar.
+
+
+```{python}
+#| label: fig-polar
+#| echo: true
+#| code-line-numbers: "|6|9"
+#| output-location: column-fragment
+#| fig-cap-location: top
+#| fig-cap:  "A line plot on a polar axis"
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+r = np.arange(0, 2, 0.01)
+theta = 2 * np.pi * r
+fig, ax = plt.subplots(
+  subplot_kw = {'projection': 'polar'} 
+)
+ax.plot(theta, r)
+ax.set_rticks([0.5, 1, 1.5, 2])
+ax.grid(True)
+plt.show()
+
+```
+
+
+------------------------------------------------------------------------
+
+## MNE-Python {.smaller}
+
+- classes (CamelCase names) 
+- functions (underscore_case names) 
+
+
+```{python}
+
+#| echo: true
+
+import mne
+import inspect
+
+mne.io.Raw.__dict__
+
+
+```
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+## Order of Operations
+
+1.  Filter
+2.  Artifact correction
+3.  Re-reference
+4.  Epoch
+5.  Artifact rejection
+6.  Average
+7.  Plot ERP waveforms
+8.  Difference waves
+9.  Plot waveforms from each step
+10. Grand averages
+11. Dependent Variables
