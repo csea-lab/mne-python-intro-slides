@@ -30,17 +30,16 @@ editor_options:
 ## Why Code?
 
 -   Adaptability
-  
--   Flexibility 
-  
--   Integration 
-  
--   Repeatability 
-  
--   Reusability 
-  
--   Sharability 
 
+-   Flexibility
+
+-   Integration
+
+-   Repeatability
+
+-   Reusability
+
+-   Sharability
 
 ------------------------------------------------------------------------
 
@@ -48,7 +47,7 @@ editor_options:
 
 -   Laptop / Desktop
 
-![](IMG-1945.jpg){.absolute top=50 right=50  height="250"}
+![](imgs/IMG-1945.jpg){.absolute top="50" right="50" height="250"}
 
 ------------------------------------------------------------------------
 
@@ -57,8 +56,7 @@ editor_options:
 -   Laptop / Desktop
 -   Remote Environments
 
-![](IMG-1945.jpg){.absolute top=50 right=50  height="250"}
-![](IMG-2468_c.jpg){.absolute bottom=0 right=50  height="250"}
+![](imgs/IMG-1945.jpg){.absolute top="50" right="50" height="250"} ![](imgs/IMG-2468_c.jpg){.absolute bottom="0" right="50" height="250"}
 
 ------------------------------------------------------------------------
 
@@ -68,28 +66,26 @@ editor_options:
 -   Remote Environments
 -   Hipergator Cluster
 
-::: {.fragment}
-::: {.fragment .fade-up .highlight-blue }
+::: fragment
+::: {.fragment .fade-up .highlight-blue}
 Not limited by software or hardware related to intellectual property licensing
 :::
-::: {.fragment}
-![](cats_boxes_giphy.gif){.absolute bottom=0 left=0  height="250"}
+
+::: fragment
+![](imgs/cats_boxes_giphy.gif){.absolute bottom="0" left="0" height="250"}
 :::
 :::
 
-![](IMG-1945.jpg){.absolute top=50 right=50  height="250"}
-![](IMG-2468_c.jpg){.absolute bottom=0 right=50  height="250"}
-
+![](imgs/IMG-1945.jpg){.absolute top="50" right="50" height="250"} ![](imgs/IMG-2468_c.jpg){.absolute bottom="0" right="50" height="250"}
 
 ## Code, How?
 
-- *Adapt* example code directly from MNE documentation
-- *Flexibly* accommodate new datatypes & formats
-- *Integrate* extensive python libraries & solutions from others
-- *Repeat* analysis with additional data or with changes to initial steps for reanalyzing the same data
-- *Reuse* with minor modifications for similar data 
-- *Share* with others so they can modify, repeat, reuse, and build on code
-
+-   *Adapt* example code directly from MNE documentation
+-   *Flexibly* accommodate new datatypes & formats
+-   *Integrate* extensive python libraries & solutions from others
+-   *Repeat* analysis with additional data or with changes to initial steps for reanalyzing the same data
+-   *Reuse* with minor modifications for similar data
+-   *Share* with others so they can modify, repeat, reuse, and build on code
 
 ------------------------------------------------------------------------
 
@@ -106,17 +102,13 @@ Not limited by software or hardware related to intellectual property licensing
 
 ------------------------------------------------------------------------
 
-## {auto-animate=true}
+##  {auto-animate="true"}
 
 ::: {style="margin-top: 10px;"}
-![](cat-box.gif)
+![](imgs/cat-box.gif)
 :::
 
-
-
-
 ------------------------------------------------------------------------
-
 
 ## MNE-Python Design Philosophy
 
@@ -162,18 +154,35 @@ Not limited by software or hardware related to intellectual property licensing
 
 -   MNE-Python data objects as `NumPy` arrays facilitates:
     -   Making custom algorithms
-    -   Moving data into one of [scikit-learn's](https://scikit-learn.org/stable/) machine learning pipelines
+    -   Moving data to [scikit-learn's](https://scikit-learn.org/stable/) machine learning pipelines
 -   Customization of MNE-Python plots
     -   `matplotlib`
     -   `PyVista`'s plotting commands
 
-::: {style="text-align: center; margin-bottom: 1em"}
-[Matplotlib: Visualization with Python](https://matplotlib.org/){preview-link="true" style="text-align: center"}
+::: {style="text-align: right; margin-center: 1em"}
+[Matplotlib](https://matplotlib.org/){preview-link="true" style="text-align: right"}
 :::
 
-::: footer
-Learn more: [scikit-learn](https://scikit-learn.org/stable/)
-:::
+
+![](imgs/Numpypng.png){.absolute bottom="0" left="75" height="120"}
+![](imgs/pandas-logo-300.png){.absolute bottom="0" left="200" height="100"}
+![](imgs/jupyter-logo-300.png){.absolute bottom="0" left="300" height="90"}
+![](imgs/dask-logo-300.png){.absolute bottom="0" left="400" height="90"}
+![](imgs/scikitlearn-logo-300.png){.absolute bottom="0" right="450" height="100"}
+![](imgs/512px-SCIPY_2.svg.png){.absolute bottom="-0" right="350" height="80"}
+![](imgs/mlpack-logo-300x300.png){.absolute bottom="-0" right="250" height="80"}
+![](imgs/Matplotlib_Logo_191209.png){.absolute bottom="0" right="150" height="80"}
+
+
+---
+
+```{python}
+
+
+
+
+```
+
 
 ------------------------------------------------------------------------
 
@@ -274,7 +283,6 @@ Learn more: [scikit-learn](https://scikit-learn.org/stable/)
 
 For a demonstration of a line plot on a polar axis, see @fig-polar.
 
-
 ```{python}
 #| label: fig-polar
 #| echo: true
@@ -298,14 +306,12 @@ plt.show()
 
 ```
 
-
 ------------------------------------------------------------------------
 
 ## MNE-Python {.smaller}
 
-- classes (CamelCase names) 
-- functions (underscore_case names) 
-
+-   classes (CamelCase names)
+-   functions (underscore_case names)
 
 ```{python}
 
