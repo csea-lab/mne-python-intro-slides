@@ -507,11 +507,13 @@ but you don’t reply to email.</p>
 </section>
 <section id="mne-python-design-philosophy" class="slide level2">
 <h2>MNE-Python Design Philosophy</h2>
-<h4 id="interactive-versus-scripted-analysis">Interactive versus scripted analysis</h4>
-<h4 id="integration-with-the-scientific-python-stack">Integration with the scientific python stack</h4>
-<h4 id="submodule-based-organization">Submodule-based organization</h4>
-<h4 id="unified-application-program-interface-api">Unified Application Program Interface (API)</h4>
-<h4 id="in-place-operation">In-place operation</h4>
+<ul>
+<li><h3 id="interactive-versus-scripted-analysis">Interactive versus Scripted Analysis</h3></li>
+<li><h3 id="integration-with-the-scientific-python-stack">Integration with the Scientific Python Stack</h3></li>
+<li><h3 id="submodule-based-organization">Submodule-based Organization</h3></li>
+<li><h3 id="unified-application-program-interface-api">Unified Application Program Interface (API)</h3></li>
+<li><h3 id="in-place-operation">In-place Operation</h3></li>
+</ul>
 </section>
 <section id="mne-modes-of-analysis" class="slide level2 smaller">
 <h2>MNE: Modes of analysis</h2>
@@ -560,8 +562,34 @@ plotting &amp; exploration</li>
 </div>
 <p><img data-src="imgs/Numpypng.png" class="absolute" style="left: 75px; bottom: 0px; height: 120px; "> <img data-src="imgs/pandas-logo-300.png" class="absolute" style="left: 200px; bottom: 0px; height: 100px; "> <img data-src="imgs/jupyter-logo-300.png" class="absolute" style="left: 300px; bottom: 0px; height: 90px; "> <img data-src="imgs/dask-logo-300.png" class="absolute" style="left: 400px; bottom: 0px; height: 90px; "> <img data-src="imgs/scikitlearn-logo-300.png" class="absolute" style="bottom: 0px; right: 450px; height: 100px; "> <img data-src="imgs/512px-SCIPY_2.svg.png" class="absolute" style="bottom: 0px; right: 350px; height: 80px; "> <img data-src="imgs/mlpack-logo-300x300.png" class="absolute" style="bottom: 0px; right: 250px; height: 80px; "> <img data-src="imgs/Matplotlib_Logo_191209.png" class="absolute" style="bottom: 0px; right: 150px; height: 80px; "></p>
 </section>
-<section class="slide level2">
-
+<section id="python" class="slide level2 smaller">
+<h2>python</h2>
+<p>For a demonstration of a line plot on a polar axis, see <a href="#/fig-polar">Figure&nbsp;1</a>.</p>
+<div class="cell fig-cap-location-top columns column-output-location" data-execution_count="1">
+<div class="column">
+<div class="sourceCode cell-code" id="cb1" data-code-line-numbers="|6|9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a>r <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.01</span>)</span>
+<span id="cb1-5"><a href="#cb1-5"></a>theta <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> r</span>
+<span id="cb1-6"><a href="#cb1-6"></a>fig, ax <span class="op">=</span> plt.subplots(</span>
+<span id="cb1-7"><a href="#cb1-7"></a>  subplot_kw <span class="op">=</span> {<span class="st">'projection'</span>: <span class="st">'polar'</span>} </span>
+<span id="cb1-8"><a href="#cb1-8"></a>)</span>
+<span id="cb1-9"><a href="#cb1-9"></a>ax.plot(theta, r)</span>
+<span id="cb1-10"><a href="#cb1-10"></a>ax.set_rticks([<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">2</span>])</span>
+<span id="cb1-11"><a href="#cb1-11"></a>ax.grid(<span class="va">True</span>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-display">
+<div id="fig-polar" class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="MNE-pres_files/figure-revealjs/fig-polar-output-1.png" width="443" height="432"></p>
+<p></p><figcaption aria-hidden="true">Figure 1: A line plot on a polar axis</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="mne-submodule-based-organization" class="slide level2">
 <h2>MNE: Submodule-based organization</h2>
@@ -581,26 +609,62 @@ plotting &amp; exploration</li>
 <section id="mne-unified-api" class="slide level2">
 <h2>MNE: Unified API</h2>
 <h3 id="application-program-interface">(Application Program Interface)</h3>
-<h4 id="context-allows-a-program-to-exchange-information">…context allows a program to exchange information</h4>
+<h4 id="context-allowing-a-program-to-exchange-information">…context allowing a program to exchange information</h4>
 <ul>
 <li>APIs expose and receive only certain information.<br>
 </li>
 <li>There isn’t a difference between whether the information is received from or shared with a human-user or another program.</li>
 </ul>
 </section>
-<section id="mne-python-in-place-operation" class="slide level2">
-<h2>MNE-Python: In-place operation</h2>
-<ul>
-<li>MNE functions are designed to avoid loading data until necessary.
-<ul>
-<li>This allows a low in-memory footprint.</li>
-<li><code>NumPy</code> has extensive</li>
-</ul></li>
-<li>When data are loaded opertations are performed directly on variables unless the data are explicitly copied.</li>
-</ul>
+<section class="slide level2">
+
+<p><img data-src="imgs/mne-signal.png" class="absolute" style="left: 0px; bottom: 0px; height: 800px; "></p>
 </section>
 <section class="slide level2">
 
+<p><img data-src="imgs/mne-signal.png" class="absolute" style="left: 0px; bottom: 0px; height: 800px; "></p>
+<p><img data-src="imgs/mne-raw.png" class="absolute" style="top: 0px; right: 50px; height: 150px; "></p>
+</section>
+<section class="slide level2">
+
+
+<img data-src="imgs/mne-spaces.png" class="r-stretch"></section>
+<section id="mne-python-in-place-operation" class="slide level2 smaller">
+<h2>MNE-Python: In-place operation</h2>
+<ul>
+<li>MNE functions avoid loading data until necessary - speeding up analyses.</li>
+<li>MNE workflows that utilize method chaining have a low in-memory footprint.</li>
+</ul>
+<div class="cell columns column-output-location" data-execution_count="2">
+<div class="column">
+<div class="sourceCode cell-code" id="cb2" data-code-line-numbers="|3-5|8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>line <span class="op">=</span> <span class="st">"switchport trunk allowed vlan 10,20,30"</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a>words <span class="op">=</span> line.split()</span>
+<span id="cb2-4"><a href="#cb2-4"></a>vlans_str <span class="op">=</span> words[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb2-5"><a href="#cb2-5"></a>vlans <span class="op">=</span> vlans_str.split(<span class="st">","</span>)</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="bu">print</span>(vlans)</span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a>vlans <span class="op">=</span> line.split()[<span class="op">-</span><span class="dv">1</span>].split(<span class="st">","</span>)</span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="bu">print</span>(vlans)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code>['10', '20', '30']
+['10', '20', '30']</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li><code>NumPy</code> has extensive referencing and<br>
+broadcasting routines that are optimized<br>
+to conserve memory.</li>
+<li>Operations are performed directly on<br>
+variables without need for explicit copying.</li>
+</ul>
+</div>
+<div class="fragment">
+<p><img data-src="imgs/Best-band-ever-whole-wide-world.gif" class="absolute" style="bottom: 0px; right: 0px; height: 250px; "></p>
+</div>
 </section>
 <section class="slide level2">
 
@@ -656,55 +720,26 @@ plotting &amp; exploration</li>
 <p><a href="https://mne.tools/stable/auto_tutorials/index.html#introductory-tutorials" data-preview-link="true" style="text-align: center">MNE-Python: Introductory Tutorials</a></p>
 </div>
 </section>
-<section id="python" class="slide level2 smaller">
-<h2>python</h2>
-<p>For a demonstration of a line plot on a polar axis, see <a href="#/fig-polar">Figure&nbsp;1</a>.</p>
-<div class="cell fig-cap-location-top columns column-output-location" data-execution_count="1">
-<div class="column">
-<div class="sourceCode cell-code" id="cb1" data-code-line-numbers="|6|9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a>r <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.01</span>)</span>
-<span id="cb1-5"><a href="#cb1-5"></a>theta <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> r</span>
-<span id="cb1-6"><a href="#cb1-6"></a>fig, ax <span class="op">=</span> plt.subplots(</span>
-<span id="cb1-7"><a href="#cb1-7"></a>  subplot_kw <span class="op">=</span> {<span class="st">'projection'</span>: <span class="st">'polar'</span>} </span>
-<span id="cb1-8"><a href="#cb1-8"></a>)</span>
-<span id="cb1-9"><a href="#cb1-9"></a>ax.plot(theta, r)</span>
-<span id="cb1-10"><a href="#cb1-10"></a>ax.set_rticks([<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">2</span>])</span>
-<span id="cb1-11"><a href="#cb1-11"></a>ax.grid(<span class="va">True</span>)</span>
-<span id="cb1-12"><a href="#cb1-12"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column fragment">
-<div class="cell-output cell-output-display">
-<div id="fig-polar" class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="MNE-pres_files/figure-revealjs/fig-polar-output-1.png" width="443" height="432"></p>
-<p></p><figcaption aria-hidden="true">Figure 1: A line plot on a polar axis</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</section>
 <section id="mne-python" class="slide level2 smaller">
 <h2>MNE-Python</h2>
 <ul>
 <li>classes (CamelCase names)</li>
 <li>functions (underscore_case names)</li>
 </ul>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> mne</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> inspect</span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a>mne.io.Raw.__dict__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> mne</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="im">import</span> inspect</span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a>mne.io.Raw.__dict__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>mappingproxy({'__module__': 'mne.io.fiff.raw',
               '__doc__': 'Raw data in FIF format.\n\n    Parameters\n    ----------\n    fname : str | file-like\n        The raw filename to load. For files that have automatically been split,\n        the split part will be automatically loaded. Filenames not ending with\n        ``raw.fif``, ``raw_sss.fif``, ``raw_tsss.fif``, ``_meg.fif``,\n        ``_eeg.fif``,  or ``_ieeg.fif`` (with or without an optional additional\n        ``.gz`` extension) will generate a warning. If a file-like object is\n        provided, preloading must be used.\n\n        .. versionchanged:: 0.18\n           Support for file-like objects.\n    allow_maxshield : bool | str (default False)\n        If True, allow loading of data that has been recorded with internal\n        active compensation (MaxShield). Data recorded with MaxShield should\n        generally not be loaded directly, but should first be processed using\n        SSS/tSSS to remove the compensation signals that may also affect brain\n        activity. Can also be "yes" to load without eliciting a warning.\n    \n    preload : bool or str (default False)\n        Preload data into memory for data manipulation and faster indexing.\n        If True, the data will be preloaded into memory (fast, requires\n        large amount of memory). If preload is a string, preload is the\n        file name of a memory-mapped file which is used to store the data\n        on the hard drive (slower, requires less memory).\n    \n    on_split_missing : str\n        Can be ``\'raise\'`` (default) to raise an error, ``\'warn\'`` to emit a\n        warning, or ``\'ignore\'`` to ignore when split file is missing.\n    \n        .. versionadded:: 0.22\n    \n    verbose : bool | str | int | None\n        Control verbosity of the logging output. If ``None``, use the default\n        verbosity level. See the :ref:`logging documentation &lt;tut-logging&gt;` and\n        :func:`mne.verbose` for details. Should only be passed as a keyword\n        argument.\n\n    Attributes\n    ----------\n    \n    info : mne.Info\n        The :class:`mne.Info` object with information about the sensors and methods of measurement.\n    ch_names : list of string\n        List of channels\' names.\n    n_times : int\n        Total number of time points in the raw file.\n    times :  ndarray\n        Time vector in seconds. Starts from 0, independently of `first_samp`\n        value. Time interval between consecutive time samples is equal to the\n        inverse of the sampling frequency.\n    preload : bool\n        Indicates whether raw data are in memory.\n    \n    verbose : bool | str | int | None\n        Control verbosity of the logging output. If ``None``, use the default\n        verbosity level. See the :ref:`logging documentation &lt;tut-logging&gt;` and\n        :func:`mne.verbose` for details. Should only be passed as a keyword\n        argument.\n    ',
               '__init__': &lt;function mne.io.fiff.raw.__init__(self, fname, allow_maxshield=False, preload=False, on_split_missing='raise', verbose=None)&gt;,
               '_read_raw_file': &lt;function mne.io.fiff.raw._read_raw_file(self, fname, allow_maxshield, preload, do_check_ext=True, verbose=None)&gt;,
-              '_dtype': &lt;property at 0x1af2851c0&gt;,
+              '_dtype': &lt;property at 0x1ae7012b0&gt;,
               '_read_segment_file': &lt;function mne.io.fiff.raw.Raw._read_segment_file(self, data, idx, fi, start, stop, cals, mult)&gt;,
               'fix_mag_coil_types': &lt;function mne.io.fiff.raw.Raw.fix_mag_coil_types(self)&gt;,
-              'acqparser': &lt;property at 0x1af285300&gt;})</code></pre>
+              'acqparser': &lt;property at 0x1ae7013f0&gt;})</code></pre>
 </div>
 </div>
 </section>

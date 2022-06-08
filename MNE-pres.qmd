@@ -112,15 +112,15 @@ Not limited by software or hardware related to intellectual property licensing
 
 ## MNE-Python Design Philosophy
 
-#### Interactive versus scripted analysis
+- ### Interactive versus Scripted Analysis
 
-#### Integration with the scientific python stack
+- ### Integration with the Scientific Python Stack
 
-#### Submodule-based organization
+- ### Submodule-based Organization
 
-#### Unified Application Program Interface (API)
+- ### Unified Application Program Interface (API)
 
-#### In-place operation
+- ### In-place Operation
 
 ------------------------------------------------------------------------
 
@@ -173,16 +173,34 @@ Not limited by software or hardware related to intellectual property licensing
 ![](imgs/mlpack-logo-300x300.png){.absolute bottom="-0" right="250" height="80"}
 ![](imgs/Matplotlib_Logo_191209.png){.absolute bottom="0" right="150" height="80"}
 
+------------------------------------------------------------------------
 
----
+## python {.smaller}
+
+For a demonstration of a line plot on a polar axis, see @fig-polar.
 
 ```{python}
+#| label: fig-polar
+#| echo: true
+#| code-line-numbers: "|6|9"
+#| output-location: column-fragment
+#| fig-cap-location: top
+#| fig-cap:  "A line plot on a polar axis"
 
+import numpy as np
+import matplotlib.pyplot as plt
 
-
+r = np.arange(0, 2, 0.01)
+theta = 2 * np.pi * r
+fig, ax = plt.subplots(
+  subplot_kw = {'projection': 'polar'} 
+)
+ax.plot(theta, r)
+ax.set_rticks([0.5, 1, 1.5, 2])
+ax.grid(True)
+plt.show()
 
 ```
-
 
 ------------------------------------------------------------------------
 
@@ -207,21 +225,60 @@ Not limited by software or hardware related to intellectual property licensing
 
 ### (Application Program Interface)
 
-#### ...context allows a program to exchange information
+#### ...context allowing a program to exchange information
 
 -   APIs expose and receive only certain information.\
 -   There isn't a difference between whether the information is received from or shared with a human-user or another program.
 
+---
+
+![](imgs/mne-signal.png){.absolute bottom="0" left="0" height="800"}
+
+
+---
+
+![](imgs/mne-signal.png){.absolute bottom="0" left="0" height="800"}
+
+![](imgs/mne-raw.png){.absolute top="0" right="50" height="150"}
+
+---
+
+![](imgs/mne-spaces.png)
+
 ------------------------------------------------------------------------
 
-## MNE-Python: In-place operation
+## MNE-Python: In-place operation  {.smaller}
 
--   MNE functions are designed to avoid loading data until necessary.
-    -   This allows a low in-memory footprint.
-    -   `NumPy` has extensive
--   When data are loaded opertations are performed directly on variables unless the data are explicitly copied.
+- MNE functions avoid loading data until necessary - speeding up analyses.
+- MNE workflows that utilize method chaining have a low in-memory footprint.
+```{python}
+#| echo: true
+#| code-line-numbers: "|3-5|8"
+#| output-location: column-fragment
 
-------------------------------------------------------------------------
+line = "switchport trunk allowed vlan 10,20,30"
+
+words = line.split()
+vlans_str = words[-1]
+vlans = vlans_str.split(",")
+print(vlans)
+
+vlans = line.split()[-1].split(",")
+print(vlans)
+
+```
+::: {.fragment}
+- `NumPy` has extensive referencing and \
+broadcasting routines that are optimized \
+to conserve memory.
+-   Operations are performed directly on \
+variables without need for explicit copying.
+:::
+::: {.fragment}
+![](imgs/Best-band-ever-whole-wide-world.gif){.absolute bottom="0" right="0" height="250"}
+:::
+
+
 
 ------------------------------------------------------------------------
 
@@ -277,34 +334,6 @@ Not limited by software or hardware related to intellectual property licensing
 [MNE-Python: Introductory Tutorials](https://mne.tools/stable/auto_tutorials/index.html#introductory-tutorials){preview-link="true" style="text-align: center"}
 :::
 
-------------------------------------------------------------------------
-
-## python {.smaller}
-
-For a demonstration of a line plot on a polar axis, see @fig-polar.
-
-```{python}
-#| label: fig-polar
-#| echo: true
-#| code-line-numbers: "|6|9"
-#| output-location: column-fragment
-#| fig-cap-location: top
-#| fig-cap:  "A line plot on a polar axis"
-
-import numpy as np
-import matplotlib.pyplot as plt
-
-r = np.arange(0, 2, 0.01)
-theta = 2 * np.pi * r
-fig, ax = plt.subplots(
-  subplot_kw = {'projection': 'polar'} 
-)
-ax.plot(theta, r)
-ax.set_rticks([0.5, 1, 1.5, 2])
-ax.grid(True)
-plt.show()
-
-```
 
 ------------------------------------------------------------------------
 
