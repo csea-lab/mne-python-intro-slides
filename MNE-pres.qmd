@@ -230,6 +230,12 @@ plt.show()
 -   APIs expose and receive only certain information.\
 -   There isn't a difference between whether the information is received from or shared with a human-user or another program.
 
+
+::: {style="text-align: center; margin-bottom: 1em"}
+[MNE-Python: API Reference](https://mne.tools/stable/python_reference.html){preview-link="true" style="text-align: center"}
+:::
+
+
 ---
 
 ![](imgs/mne-signal.png){.absolute bottom="0" left="0" height="800"}
