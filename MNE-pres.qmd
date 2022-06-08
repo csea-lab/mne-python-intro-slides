@@ -21,9 +21,9 @@ editor_options:
 > but you don't reply to email.
 :::
 
-::: footer
-### **Karl Broman**
-:::
+
+- ### **Karl Broman**
+
 
 # Why Code?
 
@@ -47,7 +47,7 @@ editor_options:
 
 -   Laptop / Desktop
 
-![](imgs/IMG-1945.jpg){.absolute top="50" right="50" height="250"}
+![](imgs/cat-work.jpeg){.absolute top="0" right="100" height="300"} 
 
 ------------------------------------------------------------------------
 
@@ -56,7 +56,8 @@ editor_options:
 -   Laptop / Desktop
 -   Remote Environments
 
-![](imgs/IMG-1945.jpg){.absolute top="50" right="50" height="250"} ![](imgs/IMG-2468_c.jpg){.absolute bottom="0" right="50" height="250"}
+![](imgs/cat-work.jpeg){.absolute top="0" right="100" height="300"} 
+![](imgs/cat-home.jpg){.absolute bottom="0" right="50" height="250"}
 
 ------------------------------------------------------------------------
 
@@ -66,9 +67,13 @@ editor_options:
 -   Remote Environments
 -   Hipergator Cluster
 
+
+![](imgs/cat-work.jpeg){.absolute top="0" right="100" height="300"} 
+![](imgs/cat-home.jpg){.absolute bottom="0" right="50" height="250"}
+
 ::: fragment
 ::: {.fragment .fade-up .highlight-blue}
-Not limited by software or hardware related to intellectual property licensing
+*Not limited by intellectual property licensing*
 :::
 
 ::: fragment
@@ -76,20 +81,23 @@ Not limited by software or hardware related to intellectual property licensing
 :::
 :::
 
-![](imgs/IMG-1945.jpg){.absolute top="50" right="50" height="250"} ![](imgs/IMG-2468_c.jpg){.absolute bottom="0" right="50" height="250"}
+
 
 ## Code, How?
 
+::: {.incremental}
 -   *Adapt* example code directly from MNE documentation
 -   *Flexibly* accommodate new datatypes & formats
 -   *Integrate* extensive python libraries & solutions from others
 -   *Repeat* analysis with additional data or with changes to initial steps for reanalyzing the same data
 -   *Reuse* with minor modifications for similar data
 -   *Share* with others so they can modify, repeat, reuse, and build on code
+:::
 
 ------------------------------------------------------------------------
 
 ## Return on Investment
+
 
 | Advantages                      | Limitations                         |
 |---------------------------------|-------------------------------------|
@@ -112,6 +120,7 @@ Not limited by software or hardware related to intellectual property licensing
 
 ## MNE-Python Design Philosophy
 
+::: {.incremental}
 - ### Interactive versus Scripted Analysis
 
 - ### Integration with the Scientific Python Stack
@@ -121,6 +130,7 @@ Not limited by software or hardware related to intellectual property licensing
 - ### Unified Application Program Interface (API)
 
 - ### In-place Operation
+:::
 
 ------------------------------------------------------------------------
 
@@ -141,10 +151,13 @@ Not limited by software or hardware related to intellectual property licensing
 ### *Scripted-mode*
 
 -   Analysis pipeline composed of Python script(s).
+
+::: {.incremental}
 -   Scripts act as a record of everything in analysis
     -   Facilitates informed adjustment of analysis
 
     -   Facilitates refactoring, reuse, and sharing
+:::    
 :::
 :::
 
@@ -208,6 +221,8 @@ plt.show()
 
 *Organizing principles:*
 
+::: {.incremental}
+
 -   Sub-module groupings of objects and functions
 
 -   Import sub-modules directly
@@ -218,6 +233,8 @@ plt.show()
 
     -   be passed between functions within sub-module\
     -   be passed to functions from other sub-modules that will receive the data object
+    
+:::
 
 ------------------------------------------------------------------------
 
