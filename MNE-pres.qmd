@@ -116,7 +116,9 @@ editor_options:
 ![](imgs/cat-box.gif)
 :::
 
-------------------------------------------------------------------------
+
+# MNE-Python Overview
+
 
 ## MNE-Python Design Philosophy
 
@@ -299,6 +301,17 @@ variables without need for explicit copying.
 :::
 ::: {.fragment}
 ![](imgs/Best-band-ever-whole-wide-world.gif){.absolute bottom="0" right="0" height="250"}
+:::
+
+
+
+
+::: {background-opacity="0.1"  background-iframe="https://mne.tools/stable/index.html"  style="text-align: left; margin-top: 1em"}
+# MNE-Python Website
+:::
+
+::: footer
+- Alexandre Gramfort, Martin Luessi, Eric Larson, Denis A. Engemann, Daniel Strohmeier, Christian Brodbeck, Roman Goj, Mainak Jas, Teon Brooks, Lauri Parkkonen, and Matti S. Hämäläinen. MEG and EEG data analysis with MNE-Python. Frontiers in Neuroscience, 7(267):1–13, 2013. doi:10.3389/fnins.2013.00267.
 :::
 
 

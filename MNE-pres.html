@@ -506,6 +506,11 @@ but you don’t reply to email.</p>
 <div style="margin-top: 10px;">
 <p><img data-src="imgs/cat-box.gif"></p>
 </div>
+</section></section>
+<section>
+<section id="mne-python-overview" class="title-slide slide level1 center">
+<h1>MNE-Python Overview</h1>
+
 </section>
 <section id="mne-python-design-philosophy" class="slide level2">
 <h2>MNE-Python Design Philosophy</h2>
@@ -678,7 +683,17 @@ variables without need for explicit copying.</li>
 <div class="fragment">
 <p><img data-src="imgs/Best-band-ever-whole-wide-world.gif" class="absolute" style="bottom: 0px; right: 0px; height: 250px; "></p>
 </div>
+</section></section>
+<section id="mne-python-website" class="title-slide slide level1 center" data-background-opacity="0.1" data-background-iframe="https://mne.tools/stable/index.html" style="text-align: left; margin-top: 1em">
+<h1>MNE-Python Website</h1>
+
 </section>
+
+<div class="footer">
+<ul>
+<li>Alexandre Gramfort, Martin Luessi, Eric Larson, Denis A. Engemann, Daniel Strohmeier, Christian Brodbeck, Roman Goj, Mainak Jas, Teon Brooks, Lauri Parkkonen, and Matti S. Hämäläinen. MEG and EEG data analysis with MNE-Python. Frontiers in Neuroscience, 7(267):1–13, 2013. doi:10.3389/fnins.2013.00267.</li>
+</ul>
+</div>
 <section id="migrating-eeglab-to-mne-python" class="slide level2" data-background-opacity="0.1" data-background-iframe="https://mne.tools/stable/overview/migrating.html" style="text-align: left; margin-top: 1em">
 <h2><a href="https://mne.tools/stable/overview/migrating.html" data-preview-link="true" style="text-align: left">Migrating: EEGLAB to MNE-Python</a></h2>
 </section>
@@ -717,15 +732,15 @@ variables without need for explicit copying.</li>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="im">import</span> inspect</span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
 <span id="cb4-4"><a href="#cb4-4"></a>mne.io.Raw.__dict__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>mappingproxy({'__module__': 'mne.io.fiff.raw',
               '__doc__': 'Raw data in FIF format.\n\n    Parameters\n    ----------\n    fname : str | file-like\n        The raw filename to load. For files that have automatically been split,\n        the split part will be automatically loaded. Filenames not ending with\n        ``raw.fif``, ``raw_sss.fif``, ``raw_tsss.fif``, ``_meg.fif``,\n        ``_eeg.fif``,  or ``_ieeg.fif`` (with or without an optional additional\n        ``.gz`` extension) will generate a warning. If a file-like object is\n        provided, preloading must be used.\n\n        .. versionchanged:: 0.18\n           Support for file-like objects.\n    allow_maxshield : bool | str (default False)\n        If True, allow loading of data that has been recorded with internal\n        active compensation (MaxShield). Data recorded with MaxShield should\n        generally not be loaded directly, but should first be processed using\n        SSS/tSSS to remove the compensation signals that may also affect brain\n        activity. Can also be "yes" to load without eliciting a warning.\n    \n    preload : bool or str (default False)\n        Preload data into memory for data manipulation and faster indexing.\n        If True, the data will be preloaded into memory (fast, requires\n        large amount of memory). If preload is a string, preload is the\n        file name of a memory-mapped file which is used to store the data\n        on the hard drive (slower, requires less memory).\n    \n    on_split_missing : str\n        Can be ``\'raise\'`` (default) to raise an error, ``\'warn\'`` to emit a\n        warning, or ``\'ignore\'`` to ignore when split file is missing.\n    \n        .. versionadded:: 0.22\n    \n    verbose : bool | str | int | None\n        Control verbosity of the logging output. If ``None``, use the default\n        verbosity level. See the :ref:`logging documentation &lt;tut-logging&gt;` and\n        :func:`mne.verbose` for details. Should only be passed as a keyword\n        argument.\n\n    Attributes\n    ----------\n    \n    info : mne.Info\n        The :class:`mne.Info` object with information about the sensors and methods of measurement.\n    ch_names : list of string\n        List of channels\' names.\n    n_times : int\n        Total number of time points in the raw file.\n    times :  ndarray\n        Time vector in seconds. Starts from 0, independently of `first_samp`\n        value. Time interval between consecutive time samples is equal to the\n        inverse of the sampling frequency.\n    preload : bool\n        Indicates whether raw data are in memory.\n    \n    verbose : bool | str | int | None\n        Control verbosity of the logging output. If ``None``, use the default\n        verbosity level. See the :ref:`logging documentation &lt;tut-logging&gt;` and\n        :func:`mne.verbose` for details. Should only be passed as a keyword\n        argument.\n    ',
               '__init__': &lt;function mne.io.fiff.raw.__init__(self, fname, allow_maxshield=False, preload=False, on_split_missing='raise', verbose=None)&gt;,
               '_read_raw_file': &lt;function mne.io.fiff.raw._read_raw_file(self, fname, allow_maxshield, preload, do_check_ext=True, verbose=None)&gt;,
-              '_dtype': &lt;property at 0x1ae291620&gt;,
+              '_dtype': &lt;property at 0x1b18fd3a0&gt;,
               '_read_segment_file': &lt;function mne.io.fiff.raw.Raw._read_segment_file(self, data, idx, fi, start, stop, cals, mult)&gt;,
               'fix_mag_coil_types': &lt;function mne.io.fiff.raw.Raw.fix_mag_coil_types(self)&gt;,
-              'acqparser': &lt;property at 0x1ae291760&gt;})</code></pre>
+              'acqparser': &lt;property at 0x1b18fd4e0&gt;})</code></pre>
 </div>
 </div>
 </section>
@@ -747,7 +762,7 @@ variables without need for explicit copying.</li>
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</section>
     </div>
   </div>
 
