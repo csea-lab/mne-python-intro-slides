@@ -7,7 +7,7 @@ format:
     preview-links: auto
     title-slide-attributes:
       data-background-image: mne_logo.svg
-      data-background-size: 1200px
+      data-background-size: contain
       data-background-opacity: '0.2'
       data-background-position: top
 editor_options: 
@@ -302,49 +302,50 @@ variables without need for explicit copying.
 :::
 
 
-::: {style="text-align: center; margin-top: 1em"}
-## [Migrating from EEGLAB to MNE-Python](https://mne.tools/stable/overview/migrating.html){preview-link="true" style="text-align: center"}
+::: {background-opacity="0.1"  background-iframe="https://mne.tools/stable/overview/migrating.html"  style="text-align: left; margin-top: 1em"}
+## [Migrating: EEGLAB to MNE-Python](https://mne.tools/stable/overview/migrating.html){preview-link="true" style="text-align: left"}
+
 :::
 
 
-::: {style="text-align: center; margin-top: 1em"}
-## [Input - Output](https://mne.tools/stable/auto_examples/index.html#input-output){preview-link="true" style="text-align: center"}
+::: {background-opacity="0.1"  background-iframe="https://mne.tools/stable/auto_examples/index.html#input-output" style="text-align: left; margin-top: 1em"}
+## [Input - Output](https://mne.tools/stable/auto_examples/index.html#input-output){preview-link="true" style="text-align: left"}
 :::
 
 
-::: {style="text-align: center; margin-top: 1em"}
+::: {background-opacity="0.1"  background-iframe="https://mne.tools/stable/install/index.html" style="text-align: left; margin-top: 1em; auto-play-media: true"}
 ## [Installing MNE-Python](https://mne.tools/stable/install/index.html){preview-link="true" style="text-align: center"}
 :::
 
 
-::: {style="text-align: center; margin-top: 1em"}
+::: {background-opacity="0.1"  background-iframe="https://mne.tools/stable/auto_examples/index.html#preprocessing" style="text-align: left; margin-top: 1em"}
 ## [Preprocessing Examples](https://mne.tools/stable/auto_examples/index.html#preprocessing){preview-link="true" style="text-align: center"}
 :::
 
 
 
-::: {style="text-align: center; margin-top: 1em"}
+::: {background-opacity="0.1"  background-iframe="https://mne.tools/stable/auto_tutorials/index.html#working-with-continuous-data" style="text-align: left; margin-top: 1em"}
 ## [Raw: Working wth Continuous Data](https://mne.tools/stable/auto_tutorials/index.html#working-with-continuous-data){preview-link="true" style="text-align: center"}
 :::
 
 
 
-::: {style="text-align: center; margin-top: 1em"}
+::: {background-opacity="0.1"  background-iframe="https://mne.tools/stable/auto_tutorials/index.html#segmenting-continuous-data-into-epochs" style="text-align: left; margin-top: 1em"}
 ## [Epochs: Segmenting Data ](https://mne.tools/stable/auto_tutorials/index.html#segmenting-continuous-data-into-epochs){preview-link="true" style="text-align: center"}
 :::
 
 
-::: {style="text-align: center; margin-top: 1em"}
+::: {background-opacity="0.1"  background-iframe="https://mne.tools/stable/auto_tutorials/index.html#estimating-evoked-responses" style="text-align: left; margin-top: 1em"}
 ## [Evoked: Averaging](https://mne.tools/stable/auto_tutorials/index.html#estimating-evoked-responses){preview-link="true" style="text-align: center"}
 :::
 
 
-::: {style="text-align: center; margin-top: 1em"}
+::: {background-opacity="0.1"  background-iframe="https://mne.tools/stable/auto_tutorials/index.html#preprocessing" style="text-align: left; margin-top: 1em"}
 ## [Preprocessing Tutorials](https://mne.tools/stable/auto_tutorials/index.html#preprocessing){preview-link="true" style="text-align: center"}
 :::
 
 
-::: {style="text-align: center; margin-top: 1em"}
+::: {background-opacity="0.1"  background-iframe="https://mne.tools/stable/auto_tutorials/index.html#introductory-tutorials" style="text-align: left; margin-top: 1em"}
 ## [MNE-Python: Introductory Tutorials](https://mne.tools/stable/auto_tutorials/index.html#introductory-tutorials){preview-link="true" style="text-align: center"}
 :::
 
