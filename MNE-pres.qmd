@@ -308,12 +308,20 @@ variables without need for explicit copying.
 
 ::: {background-opacity="0.1"  background-iframe="https://mne.tools/stable/index.html"  style="text-align: left; margin-top: 1em"}
 # MNE-Python Website
+<<<<<<< HEAD
 
+=======
+:::
+>>>>>>> 9f737faf1cc1838dbf28a6bbcf84e1c0237b68ea
 
 ::: footer
 - Alexandre Gramfort, Martin Luessi, Eric Larson, Denis A. Engemann, Daniel Strohmeier, Christian Brodbeck, Roman Goj, Mainak Jas, Teon Brooks, Lauri Parkkonen, and Matti S. Hämäläinen. MEG and EEG data analysis with MNE-Python. Frontiers in Neuroscience, 7(267):1–13, 2013. doi:10.3389/fnins.2013.00267.
 :::
+<<<<<<< HEAD
 :::
+=======
+
+>>>>>>> 9f737faf1cc1838dbf28a6bbcf84e1c0237b68ea
 
 ::: {background-opacity="0.1"  background-iframe="https://mne.tools/stable/overview/migrating.html"  style="text-align: left; margin-top: 1em"}
 ## [Migrating: EEGLAB to MNE-Python](https://mne.tools/stable/overview/migrating.html){preview-link="true" style="text-align: left"}
