@@ -302,63 +302,52 @@ variables without need for explicit copying.
 :::
 
 
-
-------------------------------------------------------------------------
-
 ::: {style="text-align: center; margin-top: 1em"}
-[Migrating from EEGLAB to MNE-Python](https://mne.tools/stable/overview/migrating.html){preview-link="true" style="text-align: center"}
-:::
-
-------------------------------------------------------------------------
-
-::: {style="text-align: center; margin-top: 1em"}
-[Input - Output](https://mne.tools/stable/auto_examples/index.html#input-output){preview-link="true" style="text-align: center"}
-:::
-
-------------------------------------------------------------------------
-
-::: {style="text-align: center; margin-top: 1em"}
-[Installing MNE-Python](https://mne.tools/stable/install/index.html){preview-link="true" style="text-align: center"}
-:::
-
-------------------------------------------------------------------------
-
-::: {style="text-align: center; margin-top: 1em"}
-[MNE-Python](https://mne.tools/stable/auto_examples/index.html#preprocessing){preview-link="true" style="text-align: center"}
-:::
-
-------------------------------------------------------------------------
-
-::: {style="text-align: center; margin-top: 1em"}
-[Raw: Working wth Continuous Data](https://mne.tools/stable/auto_tutorials/index.html#working-with-continuous-data){preview-link="true" style="text-align: center"}
-:::
-
-------------------------------------------------------------------------
-
-::: {style="text-align: center; margin-top: 1em"}
-[Epochs: Segmenting Data into Epochs](https://mne.tools/stable/auto_tutorials/index.html#segmenting-continuous-data-into-epochs){preview-link="true" style="text-align: center"}
-:::
-
-------------------------------------------------------------------------
-
-::: {style="text-align: center; margin-top: 1em"}
-[Evoked: Estimating Evoked Responses](https://mne.tools/stable/auto_tutorials/index.html#estimating-evoked-responses){preview-link="true" style="text-align: center"}
-:::
-
-------------------------------------------------------------------------
-
-::: {style="text-align: center; margin-top: 1em"}
-[MNE-Python: Preprocessing Tutorials](https://mne.tools/stable/auto_tutorials/index.html#preprocessing){preview-link="true" style="text-align: center"}
-:::
-
-------------------------------------------------------------------------
-
-::: {style="text-align: center; margin-top: 1em"}
-[MNE-Python: Introductory Tutorials](https://mne.tools/stable/auto_tutorials/index.html#introductory-tutorials){preview-link="true" style="text-align: center"}
+## [Migrating from EEGLAB to MNE-Python](https://mne.tools/stable/overview/migrating.html){preview-link="true" style="text-align: center"}
 :::
 
 
-------------------------------------------------------------------------
+::: {style="text-align: center; margin-top: 1em"}
+## [Input - Output](https://mne.tools/stable/auto_examples/index.html#input-output){preview-link="true" style="text-align: center"}
+:::
+
+
+::: {style="text-align: center; margin-top: 1em"}
+## [Installing MNE-Python](https://mne.tools/stable/install/index.html){preview-link="true" style="text-align: center"}
+:::
+
+
+::: {style="text-align: center; margin-top: 1em"}
+## [Preprocessing Examples](https://mne.tools/stable/auto_examples/index.html#preprocessing){preview-link="true" style="text-align: center"}
+:::
+
+
+
+::: {style="text-align: center; margin-top: 1em"}
+## [Raw: Working wth Continuous Data](https://mne.tools/stable/auto_tutorials/index.html#working-with-continuous-data){preview-link="true" style="text-align: center"}
+:::
+
+
+
+::: {style="text-align: center; margin-top: 1em"}
+## [Epochs: Segmenting Data ](https://mne.tools/stable/auto_tutorials/index.html#segmenting-continuous-data-into-epochs){preview-link="true" style="text-align: center"}
+:::
+
+
+::: {style="text-align: center; margin-top: 1em"}
+## [Evoked: Averaging](https://mne.tools/stable/auto_tutorials/index.html#estimating-evoked-responses){preview-link="true" style="text-align: center"}
+:::
+
+
+::: {style="text-align: center; margin-top: 1em"}
+## [Preprocessing Tutorials](https://mne.tools/stable/auto_tutorials/index.html#preprocessing){preview-link="true" style="text-align: center"}
+:::
+
+
+::: {style="text-align: center; margin-top: 1em"}
+## [MNE-Python: Introductory Tutorials](https://mne.tools/stable/auto_tutorials/index.html#introductory-tutorials){preview-link="true" style="text-align: center"}
+:::
+
 
 ## MNE-Python {.smaller}
 
@@ -377,9 +366,7 @@ mne.io.Raw.__dict__
 
 ```
 
-------------------------------------------------------------------------
 
-------------------------------------------------------------------------
 
 ## Order of Operations
 
