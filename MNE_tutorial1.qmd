@@ -64,7 +64,9 @@ print(raw)
 - after assigning continuous data to the variable "raw" information is printed about the data file
    - the file is assigned and metadata information is immediately available 
    - however to read entire file take time and occupy memory 
-   
+  
+- In addition to the information displayed during loading, you can get a glimpse of the basic details of a Raw object by printing it; 
+
 :::
 
 
@@ -82,10 +84,19 @@ print(raw.info)
 
 ![](imgs_tut1/pipeline1.png){.absolute bottom=-20 left=50  height="60"} 
 
+::: {.notes}
+
+- Even more information is available by printing its info attribute (a dictionary-like object that is preserved across Raw, Epochs, and Evoked objects). 
+- The info data structure keeps track of
+   - channel locations 
+   - any filters that have been used
+   - chs: different sensor types and handles each appropriately 
+   - See The Info data structure for more on the Info class. 
+:::
 
 --- 
 
-### Overview {.scrollable}
+### Overview: Raw Data Class {.scrollable}
 
 ```{python}
 #| echo: true
@@ -95,24 +106,103 @@ raw.plot_psd(fmax=50);
 
 ```
 
+::: {.notes}
+- Raw objects also have several built-in plotting methods; 
+- plot_psd(): power spectral density (PSD) for each sensor type with 
+- **[SHOW SPYDER]** FOR plot(): of raw sensor traces 
+
+:::
 
 --- 
+
+### Overview: Preprocessing {.smaller}
+
+::: columns
+::: {.column width="50%"}
+
+- **MNE methods**
+   - Filtering
+      - `mne.filter.create_filter()`
+      - `mne.filter.notch_filter()`
+      - `raw.resample()`
+   - Artifact Correction
+      - `mne.channels.DigMontage()`
+           - `..interpolate_bads()`
+           - `mne.set_eeg_reference()`
+      - `mne.preprocessing.ICA()`
+      - `mne.preprocessing.regress_artifact()`
+
+   
+:::
+::: {.column width="50%"}
+
+#### Alternatives to Artifact Correction
+- [Autoreject](https://autoreject.github.io/stable/index.html) package
+   - Automatically reject bad trials & repair bad sensors.
+   - Algorithm estimates threshold for each sensor yielding trial-wise bad sensors
+   - Trial repair: interpolation/exclusion
+- [MNE-ICALabel](https://mne.tools/mne-icalabel/stable/index.html) package
+   - Labeling ICs (from EEGLab)
+   - 3 input features: image, psd, autocorrelation 
+   
+:::
+:::
+
+![](imgs_tut1/pipeline4.png){.absolute bottom=-20 left=50  height="60"} 
+
+::: {.notes}
+
+
+
+:::
+
+
+---
+
+![](imgs_tut1/autorej_loc.jpg)
+
+::: {.notes}
+
+Fig. 8. An example diagnostic plot from an interactive viewer with autoreject (local). The data plotted here is subject 16 for the condition ‘famous’ in the EEG faces data. Each row is a different sensor. The trials are concatenated along the x axis with dotted vertical lines separating consecutive trials. Each trial is numbered at the bottom and its corresponding trigger code is at the top. The horizontal scroll bar at the bottom allows browsing trials and the vertical scroll bar on the right is for browsing sensors. A trial which is marked as bad is shown in red on the horizontal scroll bar and the corresponding column for the trial is also red. A data segment in a good trial is either i) Good (in black) ii) Bad and interpolated (blue), or iii) Bad but not interpolated (in red). Note that the worst sensors in a trial are typically interpolated.
+
+:::
+
+
+
+--- 
+
+
 
 ### Overview: Detecting experimental events {.smaller}
 
 ```{python}
-
 #| echo: true
-
-
 events = mne.find_events(raw, stim_channel='STI 014')
-print(events)  # show the first 5
+print(events[:10])  # show the first 10
+print(events.shape)
 
 ```
 
+:::{.callout-note}
+## Python Tip
+Numpy arrays can be sliced and indexed.
+:::
+
+
+::: {style="text-align: right; margin-center: 1em"}
+[NumPy for MATLAB users](http://mathesaurus.sourceforge.net/matlab-numpy.html)
+:::
+
+::: {.notes}
+
+- The sample dataset includes several “STIM” channels that recorded electrical signals sent from the stimulus delivery computer (as brief DC shifts / squarewave pulses). 
+- These pulses (often called “triggers”) are used in this dataset to mark experimental events: stimulus onset, stimulus type, and participant response (button press). 
+- The individual STIM channels are combined onto a single channel, in such a way that voltage levels on that channel can be unambiguously decoded as a particular event type. 
+- On older Neuromag systems (such as that used to record the sample data) this summation channel was called STI 014, so we can pass that channel name to the mne.find_events function to recover the timing and identity of the stimulus events.
+
+:::
 
 --- 
-
 ### Overview: Detecting experimental events {.smaller}
 
 ```{python}
@@ -162,6 +252,19 @@ dictionary sets are created by `dict()` or by '`{}`' literals
 [NumPy for MATLAB users](http://mathesaurus.sourceforge.net/matlab-numpy.html)
 :::
 
+::: {.notes}
+- The resulting events array is an ordinary 3-column NumPy array, with sample number in the first column and integer event ID in the last column; 
+- the middle column is usually ignored. 
+- Rather than keeping track of integer event IDs, we can provide an event dictionary that maps the integer IDs to experimental conditions or events. 
+
+- Event dictionaries like this one are used when extracting epochs from continuous data; the / character in the dictionary keys allows pooling across conditions by requesting partial condition descriptors 
+   - (i.e., requesting 'auditory' will select all epochs with Event IDs 1 and 2; requesting 'left' will select all epochs with Event IDs 1 and 3). 
+   - An example of this is shown in the next section. 
+
+- There is also a convenient plot_events function for visualizing the distribution of events across the duration of the recording (to make sure event detection worked as expected). 
+- Here we’ll also make use of the Info attribute to get the sampling frequency of the recording (so our x-axis will be in seconds instead of in samples).
+
+:::
 
 --- 
 
@@ -194,6 +297,27 @@ reject_criteria = dict(mag=4000e-15,     # 4000 fT
 
 ```
 
+![](imgs_tut1/pipeline6.png){.absolute bottom=-20 left=50  height="60"} 
+
+
+--- 
+
+### Overview: Epoching continuous data {.smaller}
+
+```{python}
+
+#| echo: true
+
+reject_criteria = dict(mag=4000e-15,     # 4000 fT
+                       grad=4000e-13,    # 4000 fT/cm
+                       eeg=150e-6,       # 150 µV
+                       eog=250e-6)       # 250 µV
+
+```
+
+![](imgs_tut1/pipeline6.png){.absolute bottom=-20 left=50  height="60"} 
+
+
 :::{.callout-warning}
 ## Consult the MNE function reference.
 Using the correct input format can be challenging in MNE. [`help(mne.Epochs)`](https://mne.tools/stable/generated/mne.Epochs.html#mne.Epochs)
@@ -201,7 +325,15 @@ Using the correct input format can be challenging in MNE. [`help(mne.Epochs)`](h
 
 ![](imgs_tut1/help_epochs.png)
 
-![](imgs_tut1/pipeline6.png){.absolute bottom=-20 left=50  height="60"} 
+::: {.notes}
+
+- The Raw object and the events array are the bare minimum needed to create an Epochs object, which we create with the Epochs class constructor. 
+- Here we’ll also specify some data quality constraints: we’ll reject any epoch where peak-to-peak signal amplitude is beyond reasonable limits for that channel type. 
+- This is done with a rejection dictionary; you may include or omit thresholds for any of the channel types present in your data. 
+- The values given here are reasonable for this particular dataset, but may need to be adapted for different hardware or recording conditions. 
+- For a more automated approach, consider using the autoreject package.
+
+:::
 
 --- 
 
@@ -217,6 +349,13 @@ epochs = mne.Epochs(raw, events, event_id=event_dict, tmin=-0.2, tmax=0.5,
 ```
 
 ![](imgs_tut1/pipeline6.png){.absolute bottom=-20 left=50  height="60"} 
+
+::: {.notes}
+
+- We’ll also pass the event dictionary as the event_id parameter (so we can work with easy-to-pool event labels instead of the integer event IDs), and specify tmin and tmax (the time relative to each event at which to start and end each epoch). 
+- As mentioned above, by default Raw and Epochs data aren’t loaded into memory (they’re accessed from disk only when needed), but here we’ll force loading into memory using the preload=True parameter so that we can see the results of the rejection criteria being applied:
+
+:::
 
 --- 
 
@@ -264,6 +403,10 @@ del raw, epochs  # free up memory
 
 ![](imgs_tut1/pipeline5.png){.absolute bottom=40 left=50  height="60"} 
 
+::: {.notes}
+
+:::
+
 --- 
 
 ### Overview: Epochs Plot-types {.smaller}
@@ -290,6 +433,12 @@ It's important to select the specific data that you want to plot. MNE often will
 :::
 :::
 
+::: {.notes}
+- Like Raw objects, Epochs objects also have a number of built-in plotting methods. 
+- One is plot_image, which shows each epoch as one row of an image map, with color representing signal magnitude; the average evoked response and the sensor location are shown below the image:
+
+:::
+
 --- 
 
 ### Overview: Time-frequency analysis {.smaller}
@@ -305,6 +454,12 @@ power
 
 ```
 
+::: {.notes}
+- The mne.time_frequency submodule provides implementations of several algorithms to compute time-frequency representations, power spectral density, and cross-spectral density. 
+- Here, for example, we’ll compute for the auditory epochs the induced power at different frequencies and times, using Morlet wavelets. 
+- On this dataset the result is not especially informative (it just shows the evoked “auditory N100” response); see here for a more extended example on a dataset with richer frequency content.
+
+:::
 
 --- 
 
@@ -333,8 +488,15 @@ aud_evoked
 ```
 
 
+
 ![](imgs_tut1/pipeline7.png){.absolute bottom=-20 left=50  height="60"} 
 
+::: {.notes}
+
+- Now that we have our conditions in aud_epochs and vis_epochs, we can get an estimate of evoked responses to auditory versus visual stimuli by averaging together the epochs in each condition. 
+- This is as simple as calling the average method on the Epochs object, and then using a function from the mne.viz module to compare the global field power for each sensor type of the two Evoked objects:
+
+:::
 
 --- 
 
@@ -355,17 +517,11 @@ mne.viz.plot_compare_evokeds(dict(auditory=aud_evoked, visual=vis_evoked),
 ### Overview: Estimating evoked responses {.smaller}
 
 ```{python}
-
 #| echo: true
-
-
 aud_evoked.plot_joint(picks='eeg');
-
-
 ```
 
-
-![](imgs_tut1/pipeline8.png){.absolute bottom=-20 left=50  height="60"} 
+![](imgs_tut1/pipeline8.png){.absolute bottom=-50 left=50  height="60"} 
 
 --- 
 
@@ -377,7 +533,18 @@ aud_evoked.plot_joint(picks='eeg');
 aud_evoked.plot_topomap(times=[0., 0.08, 0.1, 0.12, 0.2], ch_type='eeg');
 ```
 
+:::{.callout-note}
+## Python Tip
+Lists are created by `list()` or by '`[]`' literals. 
+:::
+
+
 ![](imgs_tut1/pipeline8.png){.absolute bottom=-20 left=50  height="60"} 
+
+::: {.notes}
+- We can also get a more detailed view of each Evoked object using other plotting methods such as plot_joint or plot_topomap. 
+- Here we’ll examine just the EEG channels, and see the classic auditory evoked N100-P200 pattern over dorso-frontal electrodes, then plot scalp topographies at some additional arbitrary times:
+:::
 
 --- 
 
@@ -390,7 +557,13 @@ evoked_diff
 ```
 
 
-![](imgs_tut1/pipeline9.png){.absolute bottom=-20 left=50  height="60"} 
+![](imgs_tut1/pipeline9.png){.absolute bottom=-100 left=50  height="60"} 
+
+::: {.notes}
+- Evoked objects can also be combined to show contrasts between conditions, using the mne.combine_evoked function. 
+- A simple difference can be generated by passing weights=[1, -1]. 
+- We’ll then plot the difference wave at each sensor using plot_topo:
+:::
 
 --- 
 
@@ -398,7 +571,6 @@ evoked_diff
 
 ```{python}
 #| echo: true
-
 evoked_diff.pick_types(meg='mag').plot_topo(color='r', legend=False);
 ```
 
@@ -424,92 +596,6 @@ evoked_diff.pick_types(meg='mag').plot_topo(color='r', legend=False);
 ::: aside
 [Similarities & Differences of Core Data Classes ](https://mne.tools/stable/auto_tutorials/evoked/10_evoked_overview.html#similarities-among-the-core-data-structures)
 ::: 
-
---- 
-
-### Overview {.smaller}
-
-```{python}
-
-#| echo: true
-#| code-line-numbers: "|2|8"
-#| output-location: column-fragment
-#| fig-cap-location: top
-#| fig-cap:  "A line plot on a polar axis"
-
-
-
-```
-
-
---- 
-
-### Overview {.smaller}
-
-```{python}
-
-#| echo: true
-#| code-line-numbers: "|2|8"
-#| output-location: column-fragment
-#| fig-cap-location: top
-#| fig-cap:  "A line plot on a polar axis"
-
-
-
-```
-
-
---- 
-
-### Overview {.smaller}
-
-```{python}
-
-#| echo: true
-#| code-line-numbers: "|2|8"
-#| output-location: column-fragment
-#| fig-cap-location: top
-#| fig-cap:  "A line plot on a polar axis"
-
-
-
-```
-
-
---- 
-
-### Overview {.smaller}
-
-```{python}
-
-#| echo: true
-#| code-line-numbers: "|2|8"
-#| output-location: column-fragment
-#| fig-cap-location: top
-#| fig-cap:  "A line plot on a polar axis"
-
-
-
-```
-
-
---- 
-
-### Overview {.smaller}
-
-```{python}
-
-#| echo: true
-#| code-line-numbers: "|2|8"
-#| output-location: column-fragment
-#| fig-cap-location: top
-#| fig-cap:  "A line plot on a polar axis"
-
-
-
-```
-
-
 
 
 

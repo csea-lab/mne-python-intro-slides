@@ -449,6 +449,7 @@
 <li>the file is assigned and metadata information is immediately available</li>
 <li>however to read entire file take time and occupy memory</li>
 </ul></li>
+<li>In addition to the information displayed during loading, you can get a glimpse of the basic details of a Raw object by printing it;</li>
 </ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -489,10 +490,32 @@
 </div>
 </div>
 <p><img data-src="imgs_tut1/pipeline1.png" class="absolute" style="left: 50px; bottom: -20px; height: 60px; "></p>
+<aside class="notes">
+<ul>
+<li>Even more information is available by printing its info attribute (a dictionary-like object that is preserved across Raw, Epochs, and Evoked objects).</li>
+<li>The info data structure keeps track of
+<ul>
+<li>channel locations</li>
+<li>any filters that have been used</li>
+<li>chs: different sensor types and handles each appropriately</li>
+<li>See The Info data structure for more on the Info class.</li>
+</ul></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section class="slide level2">
 
-<h3 class="scrollable" id="overview">Overview</h3>
+<h3 class="scrollable" id="overview-raw-data-class-1">Overview: Raw Data Class</h3>
 <div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>raw.plot_psd(fmax<span class="op">=</span><span class="dv">50</span>)<span class="op">;</span></span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="co">#raw.plot(duration=5, n_channels=30)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -509,13 +532,106 @@
 <p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-4-output-4.png" width="941" height="800"></p>
 </div>
 </div>
+<aside class="notes">
+<ul>
+<li>Raw objects also have several built-in plotting methods;</li>
+<li>plot_psd(): power spectral density (PSD) for each sensor type with</li>
+<li><strong>[SHOW SPYDER]</strong> FOR plot(): of raw sensor traces</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section class="slide level2">
+
+<h3 class="smaller" id="overview-preprocessing">Overview: Preprocessing</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li><strong>MNE methods</strong>
+<ul>
+<li>Filtering
+<ul>
+<li><code>mne.filter.create_filter()</code></li>
+<li><code>mne.filter.notch_filter()</code></li>
+<li><code>raw.resample()</code></li>
+</ul></li>
+<li>Artifact Correction
+<ul>
+<li><code>mne.channels.DigMontage()</code>
+<ul>
+<li><code>..interpolate_bads()</code></li>
+<li><code>mne.set_eeg_reference()</code></li>
+</ul></li>
+<li><code>mne.preprocessing.ICA()</code></li>
+<li><code>mne.preprocessing.regress_artifact()</code></li>
+</ul></li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<h4 id="alternatives-to-artifact-correction">Alternatives to Artifact Correction</h4>
+<ul>
+<li><a href="https://autoreject.github.io/stable/index.html">Autoreject</a> package
+<ul>
+<li>Automatically reject bad trials &amp; repair bad sensors.</li>
+<li>Algorithm estimates threshold for each sensor yielding trial-wise bad sensors</li>
+<li>Trial repair: interpolation/exclusion</li>
+</ul></li>
+<li><a href="https://mne.tools/mne-icalabel/stable/index.html">MNE-ICALabel</a> package
+<ul>
+<li>Labeling ICs (from EEGLab)</li>
+<li>3 input features: image, psd, autocorrelation</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<p><img data-src="imgs_tut1/pipeline4.png" class="absolute" style="left: 50px; bottom: -20px; height: 60px; "></p>
+<aside class="notes">
+
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section class="slide level2">
+
+
+<img data-src="imgs_tut1/autorej_loc.jpg" class="r-stretch"><aside class="notes">
+<p>Fig. 8. An example diagnostic plot from an interactive viewer with autoreject (local). The data plotted here is subject 16 for the condition ‘famous’ in the EEG faces data. Each row is a different sensor. The trials are concatenated along the x axis with dotted vertical lines separating consecutive trials. Each trial is numbered at the bottom and its corresponding trigger code is at the top. The horizontal scroll bar at the bottom allows browsing trials and the vertical scroll bar on the right is for browsing sensors. A trial which is marked as bad is shown in red on the horizontal scroll bar and the corresponding column for the trial is also red. A data segment in a good trial is either i) Good (in black) ii) Bad and interpolated (blue), or iii) Bad but not interpolated (in red). Note that the worst sensors in a trial are typically interpolated.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section class="slide level2">
 
 <h3 class="smaller" id="overview-detecting-experimental-events">Overview: Detecting experimental events</h3>
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>events <span class="op">=</span> mne.find_events(raw, stim_channel<span class="op">=</span><span class="st">'STI 014'</span>)</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="bu">print</span>(events)  <span class="co"># show the first 5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="bu">print</span>(events[:<span class="dv">10</span>])  <span class="co"># show the first 10</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="bu">print</span>(events.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>319 events found</code></pre>
 </div>
@@ -523,327 +639,53 @@
 <pre><code>Event IDs: [ 1  2  3  4  5 32]</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[ 6994     0     2]
- [ 7086     0     3]
- [ 7192     0     1]
- [ 7304     0     4]
- [ 7413     0     2]
- [ 7506     0     3]
- [ 7612     0     1]
- [ 7709     0     4]
- [ 7810     0     2]
- [ 7916     0     3]
- [ 8025     0     1]
- [ 8129     0     4]
- [ 8233     0     2]
- [ 8331     0     3]
- [ 8428     0     1]
- [ 8522     0     5]
- [ 8633     0     2]
- [ 8662     0    32]
- [ 8739     0     3]
- [ 8857     0     1]
- [ 8962     0     4]
- [ 9052     0     2]
- [ 9144     0     3]
- [ 9251     0     1]
- [ 9365     0     4]
- [ 9477     0     2]
- [ 9581     0     3]
- [ 9677     0     1]
- [ 9782     0     4]
- [ 9890     0     2]
- [ 9981     0     3]
- [10101     0     1]
- [10220     0     4]
- [10315     0     2]
- [10411     0     3]
- [10531     0     1]
- [10649     0     5]
- [10734     0    32]
- [10740     0     2]
- [10836     0     3]
- [10945     0     1]
- [11042     0     4]
- [11162     0     2]
- [11278     0     3]
- [11371     0     1]
- [11465     0     4]
- [11560     0     2]
- [11671     0     3]
- [11773     0     1]
- [11882     0     4]
- [11973     0     2]
- [12071     0     3]
- [12180     0     1]
- [12275     0     4]
- [12367     0     2]
- [12474     0     3]
- [12567     0     1]
- [12670     0     4]
- [12761     0     2]
- [12859     0     5]
- [12950     0    32]
- [12970     0     1]
- [13063     0     4]
- [13168     0     2]
- [13279     0     3]
- [13373     0     1]
- [13478     0     4]
- [13580     0     2]
- [13674     0     3]
- [13775     0     1]
- [13865     0     4]
- [13969     0     2]
- [14067     0     3]
- [14179     0     1]
- [14295     0     4]
- [14403     0     2]
- [14519     0     3]
- [14612     0     1]
- [14728     0     4]
- [14830     0     5]
- [14919     0    32]
- [14934     0     3]
- [15032     0     1]
- [15140     0     4]
- [15258     0     2]
- [15364     0     3]
- [15467     0     1]
- [15570     0     4]
- [15670     0     2]
- [15767     0     3]
- [15883     0     1]
- [15980     0     4]
- [16096     0     2]
- [16192     0     3]
- [16295     0     1]
- [16410     0     4]
- [16517     0     2]
- [16634     0     3]
- [16741     0     1]
- [16850     0     5]
- [16945     0    32]
- [16952     0     2]
- [17049     0     3]
- [17166     0     1]
- [17265     0     4]
- [17364     0     2]
- [17464     0     3]
- [17564     0     1]
- [17665     0     4]
- [17782     0     2]
- [17902     0     3]
- [17997     0     1]
- [18110     0     4]
- [18206     0     2]
- [18314     0     3]
- [18429     0     1]
- [18543     0     4]
- [18635     0     2]
- [18729     0     3]
- [18826     0     5]
- [18906     0    32]
- [18931     0     4]
- [19021     0     2]
- [19119     0     3]
- [19223     0     1]
- [19326     0     4]
- [19420     0     2]
- [19532     0     3]
- [19634     0     1]
- [19733     0     4]
- [19840     0     2]
- [19954     0     3]
- [20052     0     1]
- [20156     0     4]
- [20254     0     2]
- [20360     0     3]
- [20477     0     1]
- [20583     0     4]
- [20678     0     2]
- [20787     0     3]
- [20892     0     1]
- [20996     0     4]
- [21111     0     2]
- [21224     0     5]
- [21277     0    32]
- [21324     0     1]
- [21416     0     4]
- [21526     0     2]
- [21630     0     3]
- [21742     0     1]
- [21838     0     4]
- [21931     0     2]
- [22037     0     3]
- [22148     0     1]
- [22256     0     4]
- [22374     0     2]
- [22487     0     3]
- [22604     0     1]
- [22703     0     4]
- [22798     0     2]
- [22900     0     3]
- [23009     0     1]
- [23103     0     4]
- [23200     0     5]
- [23254     0    32]
- [23317     0     3]
- [23417     0     1]
- [23523     0     4]
- [23635     0     2]
- [23740     0     3]
- [23858     0     1]
- [23970     0     4]
- [24082     0     2]
- [24197     0     3]
- [24308     0     1]
- [24425     0     4]
- [24528     0     2]
- [24624     0     3]
- [24725     0     1]
- [24840     0     4]
- [24948     0     2]
- [25039     0     3]
- [25155     0     1]
- [25272     0     5]
- [25367     0     2]
- [25385     0    32]
- [25477     0     3]
- [25572     0     1]
- [25678     0     4]
- [25798     0     2]
- [25897     0     3]
- [26008     0     1]
- [26108     0     4]
- [26227     0     2]
- [26337     0     3]
- [26440     0     1]
- [26543     0     4]
- [26655     0     2]
- [26747     0     3]
- [26838     0     1]
- [26935     0     4]
- [27042     0     2]
- [27154     0     3]
- [27243     0     5]
- [27331     0    32]
- [27341     0     4]
- [27435     0     2]
- [27552     0     3]
- [27643     0     1]
- [27751     0     4]
- [27860     0     2]
- [27959     0     3]
- [28073     0     1]
- [28185     0     4]
- [28285     0     2]
- [28397     0     3]
- [28488     0     1]
- [28581     0     4]
- [28685     0     2]
- [28790     0     3]
- [28904     0     1]
- [29020     0     4]
- [29131     0     2]
- [29232     0     3]
- [29326     0     1]
- [29428     0     4]
- [29525     0     5]
- [29592     0    32]
- [29620     0     3]
- [29719     0     1]
- [29808     0     4]
- [29924     0     2]
- [30027     0     3]
- [30134     0     1]
- [30246     0     4]
- [30348     0     2]
- [30450     0     3]
- [30554     0     1]
- [30671     0     4]
- [30766     0     2]
- [30862     0     3]
- [30982     0     1]
- [31101     0     4]
- [31207     0     2]
- [31325     0     3]
- [31427     0     1]
- [31530     0     5]
- [31617     0    32]
- [31636     0     2]
- [31737     0     3]
- [31832     0     1]
- [31926     0     4]
- [32018     0     2]
- [32127     0     3]
- [32231     0     1]
- [32321     0     4]
- [32433     0     2]
- [32527     0     3]
- [32623     0     1]
- [32719     0     4]
- [32813     0     2]
- [32918     0     3]
- [33020     0     1]
- [33139     0     4]
- [33243     0     2]
- [33362     0     3]
- [33481     0     5]
- [33571     0    32]
- [33579     0     4]
- [33682     0     2]
- [33775     0     3]
- [33883     0     1]
- [33979     0     4]
- [34071     0     2]
- [34180     0     3]
- [34283     0     1]
- [34394     0     4]
- [34498     0     2]
- [34603     0     3]
- [34709     0     1]
- [34826     0     4]
- [34934     0     2]
- [35047     0     3]
- [35153     0     1]
- [35271     0     4]
- [35390     0     2]
- [35495     0     3]
- [35611     0     5]
- [35703     0    32]
- [35804     0     2]
- [35917     0     3]
- [36017     0     1]
- [36136     0     4]
- [36229     0     2]
- [36322     0     3]
- [36416     0     1]
- [36521     0     4]
- [36636     0     2]
- [36752     0     3]
- [36864     0     1]
- [36963     0     4]
- [37076     0     2]
- [37180     0     3]
- [37290     0     1]
- [37388     0     4]
- [37497     0     2]
- [37607     0     3]
- [37718     0     1]
- [37816     0     4]
- [37906     0     2]
- [38007     0     5]
- [38084     0    32]
- [38106     0     1]
- [38206     0     4]
- [38302     0     2]
- [38420     0     3]
- [38520     0     1]
- [38621     0     4]
- [42168     0    32]]</code></pre>
+<pre><code>[[6994    0    2]
+ [7086    0    3]
+ [7192    0    1]
+ [7304    0    4]
+ [7413    0    2]
+ [7506    0    3]
+ [7612    0    1]
+ [7709    0    4]
+ [7810    0    2]
+ [7916    0    3]]
+(319, 3)</code></pre>
 </div>
 </div>
+<div class="callout callout-note callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Python Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Numpy arrays can be sliced and indexed.</p>
+</div>
+</div>
+</div>
+<div style="text-align: right; margin-center: 1em">
+<p><a href="http://mathesaurus.sourceforge.net/matlab-numpy.html">NumPy for MATLAB users</a></p>
+</div>
+<aside class="notes">
+<ul>
+<li>The sample dataset includes several “STIM” channels that recorded electrical signals sent from the stimulus delivery computer (as brief DC shifts / squarewave pulses).</li>
+<li>These pulses (often called “triggers”) are used in this dataset to mark experimental events: stimulus onset, stimulus type, and participant response (button press).</li>
+<li>The individual STIM channels are combined onto a single channel, in such a way that voltage levels on that channel can be unambiguously decoded as a particular event type.</li>
+<li>On older Neuromag systems (such as that used to record the sample data) this summation channel was called STI 014, so we can pass that channel name to the mne.find_events function to recover the timing and identity of the stimulus events.</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section class="slide level2">
 
@@ -917,6 +759,30 @@
 <div style="text-align: right; margin-center: 1em">
 <p><a href="http://mathesaurus.sourceforge.net/matlab-numpy.html">NumPy for MATLAB users</a></p>
 </div>
+<aside class="notes">
+<ul>
+<li><p>The resulting events array is an ordinary 3-column NumPy array, with sample number in the first column and integer event ID in the last column;</p></li>
+<li><p>the middle column is usually ignored.</p></li>
+<li><p>Rather than keeping track of integer event IDs, we can provide an event dictionary that maps the integer IDs to experimental conditions or events.</p></li>
+<li><p>Event dictionaries like this one are used when extracting epochs from continuous data; the / character in the dictionary keys allows pooling across conditions by requesting partial condition descriptors</p>
+<ul>
+<li>(i.e., requesting ‘auditory’ will select all epochs with Event IDs 1 and 2; requesting ‘left’ will select all epochs with Event IDs 1 and 3).</li>
+<li>An example of this is shown in the next section.</li>
+</ul></li>
+<li><p>There is also a convenient plot_events function for visualizing the distribution of events across the duration of the recording (to make sure event detection worked as expected).</p></li>
+<li><p>Here we’ll also make use of the Info attribute to get the sampling frequency of the recording (so our x-axis will be in seconds instead of in samples).</p></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section class="slide level2">
 
@@ -937,6 +803,18 @@
 <span id="cb23-3"><a href="#cb23-3"></a>                       eeg<span class="op">=</span><span class="fl">150e-6</span>,       <span class="co"># 150 µV</span></span>
 <span id="cb23-4"><a href="#cb23-4"></a>                       eog<span class="op">=</span><span class="fl">250e-6</span>)       <span class="co"># 250 µV</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><img data-src="imgs_tut1/pipeline6.png" class="absolute" style="left: 50px; bottom: -20px; height: 60px; "></p>
+</section>
+<section class="slide level2">
+
+<h3 class="smaller" id="overview-epoching-continuous-data-1">Overview: Epoching continuous data</h3>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>reject_criteria <span class="op">=</span> <span class="bu">dict</span>(mag<span class="op">=</span><span class="fl">4000e-15</span>,     <span class="co"># 4000 fT</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>                       grad<span class="op">=</span><span class="fl">4000e-13</span>,    <span class="co"># 4000 fT/cm</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a>                       eeg<span class="op">=</span><span class="fl">150e-6</span>,       <span class="co"># 150 µV</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a>                       eog<span class="op">=</span><span class="fl">250e-6</span>)       <span class="co"># 250 µV</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img data-src="imgs_tut1/pipeline6.png" class="absolute" style="left: 50px; bottom: -20px; height: 60px; "></p>
 <div class="callout callout-warning callout-captioned callout-style-default">
 <div class="callout-body">
 <div class="callout-caption">
@@ -951,14 +829,32 @@
 </div>
 </div>
 <p><img data-src="imgs_tut1/help_epochs.png"></p>
-<p><img data-src="imgs_tut1/pipeline6.png" class="absolute" style="left: 50px; bottom: -20px; height: 60px; "></p>
+<aside class="notes">
+<ul>
+<li>The Raw object and the events array are the bare minimum needed to create an Epochs object, which we create with the Epochs class constructor.</li>
+<li>Here we’ll also specify some data quality constraints: we’ll reject any epoch where peak-to-peak signal amplitude is beyond reasonable limits for that channel type.</li>
+<li>This is done with a rejection dictionary; you may include or omit thresholds for any of the channel types present in your data.</li>
+<li>The values given here are reasonable for this particular dataset, but may need to be adapted for different hardware or recording conditions.</li>
+<li>For a more automated approach, consider using the autoreject package.</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section class="slide level2">
 
-<h3 class="smaller" id="overview-epoching-continuous-data-1">Overview: Epoching continuous data</h3>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>epochs <span class="op">=</span> mne.Epochs(raw, events, event_id<span class="op">=</span>event_dict, tmin<span class="op">=-</span><span class="fl">0.2</span>, tmax<span class="op">=</span><span class="fl">0.5</span>,</span>
-<span id="cb24-2"><a href="#cb24-2"></a>                    reject<span class="op">=</span>reject_criteria, preload<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h3 class="smaller" id="overview-epoching-continuous-data-2">Overview: Epoching continuous data</h3>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a>epochs <span class="op">=</span> mne.Epochs(raw, events, event_id<span class="op">=</span>event_dict, tmin<span class="op">=-</span><span class="fl">0.2</span>, tmax<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb25-2"><a href="#cb25-2"></a>                    reject<span class="op">=</span>reject_criteria, preload<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Not setting metadata</code></pre>
 </div>
@@ -1015,26 +911,42 @@
 </div>
 </div>
 <p><img data-src="imgs_tut1/pipeline6.png" class="absolute" style="left: 50px; bottom: -20px; height: 60px; "></p>
+<aside class="notes">
+<ul>
+<li>We’ll also pass the event dictionary as the event_id parameter (so we can work with easy-to-pool event labels instead of the integer event IDs), and specify tmin and tmax (the time relative to each event at which to start and end each epoch).</li>
+<li>As mentioned above, by default Raw and Epochs data aren’t loaded into memory (they’re accessed from disk only when needed), but here we’ll force loading into memory using the preload=True parameter so that we can see the results of the rejection criteria being applied:</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section class="slide level2">
 
-<h3 class="smaller" id="overview-epoching-continuous-data-2">Overview: Epoching continuous data</h3>
+<h3 class="smaller" id="overview-epoching-continuous-data-3">Overview: Epoching continuous data</h3>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb43" data-code-line-numbers="|2,3,10|4,5,11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a>conds_we_care_about <span class="op">=</span> [</span>
-<span id="cb43-2"><a href="#cb43-2"></a>  <span class="st">'auditory/left'</span>,</span>
-<span id="cb43-3"><a href="#cb43-3"></a>  <span class="st">'auditory/right'</span>,</span>
-<span id="cb43-4"><a href="#cb43-4"></a>  <span class="st">'visual/left'</span>, </span>
-<span id="cb43-5"><a href="#cb43-5"></a>  <span class="st">'visual/right'</span>]</span>
-<span id="cb43-6"><a href="#cb43-6"></a>  </span>
-<span id="cb43-7"><a href="#cb43-7"></a><span class="co"># this operates in-place</span></span>
-<span id="cb43-8"><a href="#cb43-8"></a>epochs.equalize_event_counts(conds_we_care_about) </span>
-<span id="cb43-9"><a href="#cb43-9"></a></span>
-<span id="cb43-10"><a href="#cb43-10"></a>aud_epochs <span class="op">=</span> epochs[<span class="st">'auditory'</span>]</span>
-<span id="cb43-11"><a href="#cb43-11"></a>vis_epochs <span class="op">=</span> epochs[<span class="st">'visual'</span>]</span>
-<span id="cb43-12"><a href="#cb43-12"></a></span>
-<span id="cb43-13"><a href="#cb43-13"></a><span class="kw">del</span> raw, epochs  <span class="co"># free up memory</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb44" data-code-line-numbers="|2,3,10|4,5,11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a>conds_we_care_about <span class="op">=</span> [</span>
+<span id="cb44-2"><a href="#cb44-2"></a>  <span class="st">'auditory/left'</span>,</span>
+<span id="cb44-3"><a href="#cb44-3"></a>  <span class="st">'auditory/right'</span>,</span>
+<span id="cb44-4"><a href="#cb44-4"></a>  <span class="st">'visual/left'</span>, </span>
+<span id="cb44-5"><a href="#cb44-5"></a>  <span class="st">'visual/right'</span>]</span>
+<span id="cb44-6"><a href="#cb44-6"></a>  </span>
+<span id="cb44-7"><a href="#cb44-7"></a><span class="co"># this operates in-place</span></span>
+<span id="cb44-8"><a href="#cb44-8"></a>epochs.equalize_event_counts(conds_we_care_about) </span>
+<span id="cb44-9"><a href="#cb44-9"></a></span>
+<span id="cb44-10"><a href="#cb44-10"></a>aud_epochs <span class="op">=</span> epochs[<span class="st">'auditory'</span>]</span>
+<span id="cb44-11"><a href="#cb44-11"></a>vis_epochs <span class="op">=</span> epochs[<span class="st">'visual'</span>]</span>
+<span id="cb44-12"><a href="#cb44-12"></a></span>
+<span id="cb44-13"><a href="#cb44-13"></a><span class="kw">del</span> raw, epochs  <span class="co"># free up memory</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Dropped 7 epochs: 121, 195, 258, 271, 273, 274, 275</code></pre>
 </div>
@@ -1053,6 +965,19 @@
 </div>
 
 <p><img data-src="imgs_tut1/pipeline5.png" class="absolute" style="left: 50px; bottom: 40px; height: 60px; "></p>
+<aside class="notes">
+
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <aside><div>
 <p><a href="https://mne.tools/stable/auto_tutorials/raw/20_event_arrays.html#mapping-event-ids-to-trial-descriptors">Mapping Event IDs to trial descriptors</a></p>
 </div></aside></section>
@@ -1061,8 +986,8 @@
 <h3 class="smaller" id="overview-epochs-plot-types">Overview: Epochs Plot-types</h3>
 <div class="columns">
 <div class="column" style="width:60%;">
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1"></a>aud_epochs.plot_image(picks<span class="op">=</span>[ <span class="st">'EEG 021'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a>aud_epochs.plot_image(picks<span class="op">=</span>[ <span class="st">'EEG 021'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Not setting metadata</code></pre>
 </div>
@@ -1079,9 +1004,9 @@
 <pre><code>0 bad epochs dropped</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-11-output-6.png" width="946" height="465"></p>
+<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-12-output-6.png" width="946" height="465"></p>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="121">
 <pre><code>[&lt;Figure size 960x480 with 4 Axes&gt;]</code></pre>
 </div>
 </div>
@@ -1109,26 +1034,59 @@
 </div>
 </div>
 </div>
+<aside class="notes">
+<ul>
+<li>Like Raw objects, Epochs objects also have a number of built-in plotting methods.</li>
+<li>One is plot_image, which shows each epoch as one row of an image map, with color representing signal magnitude; the average evoked response and the sensor location are shown below the image:</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section class="slide level2">
 
 <h3 class="smaller" id="overview-time-frequency-analysis">Overview: Time-frequency analysis</h3>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1"></a>frequencies <span class="op">=</span> np.arange(<span class="dv">7</span>, <span class="dv">30</span>, <span class="dv">3</span>)</span>
-<span id="cb52-2"><a href="#cb52-2"></a>power <span class="op">=</span> mne.time_frequency.tfr_morlet(aud_epochs, n_cycles<span class="op">=</span><span class="dv">2</span>, return_itc<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb52-3"><a href="#cb52-3"></a>                                      freqs<span class="op">=</span>frequencies, decim<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb52-4"><a href="#cb52-4"></a>                                    </span>
-<span id="cb52-5"><a href="#cb52-5"></a>power</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1"></a>frequencies <span class="op">=</span> np.arange(<span class="dv">7</span>, <span class="dv">30</span>, <span class="dv">3</span>)</span>
+<span id="cb53-2"><a href="#cb53-2"></a>power <span class="op">=</span> mne.time_frequency.tfr_morlet(aud_epochs, n_cycles<span class="op">=</span><span class="dv">2</span>, return_itc<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb53-3"><a href="#cb53-3"></a>                                      freqs<span class="op">=</span>frequencies, decim<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb53-4"><a href="#cb53-4"></a>                                    </span>
+<span id="cb53-5"><a href="#cb53-5"></a>power</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="122">
 <pre><code>&lt;AverageTFR | time : [-0.199795, 0.499488], freq : [7.000000, 28.000000], nave : 136, channels : 364, ~4.1 MB&gt;</code></pre>
 </div>
 </div>
+<aside class="notes">
+<ul>
+<li>The mne.time_frequency submodule provides implementations of several algorithms to compute time-frequency representations, power spectral density, and cross-spectral density.</li>
+<li>Here, for example, we’ll compute for the auditory epochs the induced power at different frequencies and times, using Morlet wavelets.</li>
+<li>On this dataset the result is not especially informative (it just shows the evoked “auditory N100” response); see here for a more extended example on a dataset with richer frequency content.</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section class="slide level2">
 
 <h3 class="smaller" id="overview-time-frequency-analysis-1">Overview: Time-frequency analysis</h3>
-<div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1"></a>power.plot([<span class="st">'EEG 021'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1"></a>power.plot([<span class="st">'EEG 021'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Removing projector &lt;Projection | PCA-v1, active : True, n_channels : 102&gt;</code></pre>
 </div>
@@ -1151,9 +1109,9 @@
 <pre><code>No baseline correction applied</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-13-output-8.png" width="743" height="436"></p>
+<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-14-output-8.png" width="743" height="436"></p>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="123">
 <pre><code>[&lt;Figure size 960x480 with 2 Axes&gt;]</code></pre>
 </div>
 </div>
@@ -1161,23 +1119,39 @@
 <section class="slide level2">
 
 <h3 class="smaller" id="overview-estimating-evoked-responses">Overview: Estimating evoked responses</h3>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1"></a>aud_evoked <span class="op">=</span> aud_epochs.average()</span>
-<span id="cb63-2"><a href="#cb63-2"></a>vis_evoked <span class="op">=</span> vis_epochs.average()</span>
-<span id="cb63-3"><a href="#cb63-3"></a></span>
-<span id="cb63-4"><a href="#cb63-4"></a>aud_evoked</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1"></a>aud_evoked <span class="op">=</span> aud_epochs.average()</span>
+<span id="cb64-2"><a href="#cb64-2"></a>vis_evoked <span class="op">=</span> vis_epochs.average()</span>
+<span id="cb64-3"><a href="#cb64-3"></a></span>
+<span id="cb64-4"><a href="#cb64-4"></a>aud_evoked</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="124">
 <pre><code>&lt;Evoked | '0.50 × auditory/left + 0.50 × auditory/right' (average, N=136), -0.1998 – 0.49949 sec, baseline -0.199795 – 0 sec, 366 ch, ~3.6 MB&gt;</code></pre>
 </div>
 </div>
 <p><img data-src="imgs_tut1/pipeline7.png" class="absolute" style="left: 50px; bottom: -20px; height: 60px; "></p>
+<aside class="notes">
+<ul>
+<li>Now that we have our conditions in aud_epochs and vis_epochs, we can get an estimate of evoked responses to auditory versus visual stimuli by averaging together the epochs in each condition.</li>
+<li>This is as simple as calling the average method on the Epochs object, and then using a function from the mne.viz module to compare the global field power for each sensor type of the two Evoked objects:</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section class="slide level2">
 
 <h3 class="smaller" id="overview-estimating-evoked-responses-1">Overview: Estimating evoked responses</h3>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1"></a>mne.viz.plot_compare_evokeds(<span class="bu">dict</span>(auditory<span class="op">=</span>aud_evoked, visual<span class="op">=</span>vis_evoked),</span>
-<span id="cb65-2"><a href="#cb65-2"></a>                             legend<span class="op">=</span><span class="st">'upper left'</span>, show_sensors<span class="op">=</span><span class="st">'upper right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1"></a>mne.viz.plot_compare_evokeds(<span class="bu">dict</span>(auditory<span class="op">=</span>aud_evoked, visual<span class="op">=</span>vis_evoked),</span>
+<span id="cb66-2"><a href="#cb66-2"></a>                             legend<span class="op">=</span><span class="st">'upper left'</span>, show_sensors<span class="op">=</span><span class="st">'upper right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Multiple channel types selected, returning one figure per type.</code></pre>
 </div>
@@ -1188,7 +1162,7 @@
 <pre><code>combining channels using "gfp"</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-15-output-4.png" width="670" height="515"></p>
+<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-16-output-4.png" width="670" height="515"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>combining channels using "gfp"</code></pre>
@@ -1197,7 +1171,7 @@
 <pre><code>combining channels using "gfp"</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-15-output-7.png" width="674" height="515"></p>
+<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-16-output-7.png" width="674" height="515"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>combining channels using "gfp"</code></pre>
@@ -1206,9 +1180,9 @@
 <pre><code>combining channels using "gfp"</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-15-output-10.png" width="678" height="515"></p>
+<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-16-output-10.png" width="678" height="515"></p>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div class="cell-output cell-output-display" data-execution_count="125">
 <pre><code>[&lt;Figure size 768x576 with 2 Axes&gt;,
  &lt;Figure size 768x576 with 2 Axes&gt;,
  &lt;Figure size 768x576 with 2 Axes&gt;]</code></pre>
@@ -1218,8 +1192,8 @@
 <section class="slide level2">
 
 <h3 class="smaller" id="overview-estimating-evoked-responses-2">Overview: Estimating evoked responses</h3>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1"></a>aud_evoked.plot_joint(picks<span class="op">=</span><span class="st">'eeg'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1"></a>aud_evoked.plot_joint(picks<span class="op">=</span><span class="st">'eeg'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Projections have already been applied. Setting proj attribute to True.</code></pre>
 </div>
@@ -1233,75 +1207,101 @@
 <pre><code>Removing projector &lt;Projection | PCA-v3, active : True, n_channels : 102&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-16-output-5.png" width="733" height="407"></p>
+<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-17-output-5.png" width="733" height="407"></p>
 </div>
 </div>
-<p><img data-src="imgs_tut1/pipeline8.png" class="absolute" style="left: 50px; bottom: -20px; height: 60px; "></p>
+<p><img data-src="imgs_tut1/pipeline8.png" class="absolute" style="left: 50px; bottom: -50px; height: 60px; "></p>
 </section>
 <section class="slide level2">
 
 <h3 class="smaller" id="overview-estimating-evoked-responses-3">Overview: Estimating evoked responses</h3>
-<div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1"></a>aud_evoked.plot_topomap(times<span class="op">=</span>[<span class="fl">0.</span>, <span class="fl">0.08</span>, <span class="fl">0.1</span>, <span class="fl">0.12</span>, <span class="fl">0.2</span>], ch_type<span class="op">=</span><span class="st">'eeg'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1"></a>aud_evoked.plot_topomap(times<span class="op">=</span>[<span class="fl">0.</span>, <span class="fl">0.08</span>, <span class="fl">0.1</span>, <span class="fl">0.12</span>, <span class="fl">0.2</span>], ch_type<span class="op">=</span><span class="st">'eeg'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-17-output-1.png" width="795" height="169"></p>
+<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-18-output-1.png" width="795" height="169"></p>
+</div>
+</div>
+<div class="callout callout-note callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Python Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Lists are created by <code>list()</code> or by ‘<code>[]</code>’ literals.</p>
+</div>
 </div>
 </div>
 <p><img data-src="imgs_tut1/pipeline8.png" class="absolute" style="left: 50px; bottom: -20px; height: 60px; "></p>
+<aside class="notes">
+<ul>
+<li>We can also get a more detailed view of each Evoked object using other plotting methods such as plot_joint or plot_topomap.</li>
+<li>Here we’ll examine just the EEG channels, and see the classic auditory evoked N100-P200 pattern over dorso-frontal electrodes, then plot scalp topographies at some additional arbitrary times:</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section class="slide level2">
 
 <h3 class="smaller" id="overview-estimating-evoked-responses-4">Overview: Estimating evoked responses</h3>
-<div class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1"></a>evoked_diff <span class="op">=</span> mne.combine_evoked([aud_evoked, vis_evoked], weights<span class="op">=</span>[<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>])</span>
-<span id="cb80-2"><a href="#cb80-2"></a>evoked_diff</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="38">
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1"></a>evoked_diff <span class="op">=</span> mne.combine_evoked([aud_evoked, vis_evoked], weights<span class="op">=</span>[<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb81-2"><a href="#cb81-2"></a>evoked_diff</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="128">
 <pre><code>&lt;Evoked | '(0.50 × auditory/left + 0.50 × auditory/right) - (0.50 × visual/left + 0.50 × visual/right)' (average, N=68.0), -0.1998 – 0.49949 sec, baseline -0.199795 – 0 sec, 366 ch, ~3.6 MB&gt;</code></pre>
 </div>
 </div>
-<p><img data-src="imgs_tut1/pipeline9.png" class="absolute" style="left: 50px; bottom: -20px; height: 60px; "></p>
+<p><img data-src="imgs_tut1/pipeline9.png" class="absolute" style="left: 50px; bottom: -100px; height: 60px; "></p>
+<aside class="notes">
+<ul>
+<li>Evoked objects can also be combined to show contrasts between conditions, using the mne.combine_evoked function.</li>
+<li>A simple difference can be generated by passing weights=[1, -1].</li>
+<li>We’ll then plot the difference wave at each sensor using plot_topo:</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section class="slide level2">
 
 <h3 class="smaller" id="overview-estimating-evoked-responses-5">Overview: Estimating evoked responses</h3>
-<div class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1"></a>evoked_diff.pick_types(meg<span class="op">=</span><span class="st">'mag'</span>).plot_topo(color<span class="op">=</span><span class="st">'r'</span>, legend<span class="op">=</span><span class="va">False</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1"></a>evoked_diff.pick_types(meg<span class="op">=</span><span class="st">'mag'</span>).plot_topo(color<span class="op">=</span><span class="st">'r'</span>, legend<span class="op">=</span><span class="va">False</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Removing projector &lt;Projection | Average EEG reference, active : True, n_channels : 60&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-19-output-2.png" width="950" height="475"></p>
+<p><img data-src="MNE_tutorial1_files/figure-revealjs/cell-20-output-2.png" width="950" height="475"></p>
 </div>
 </div>
 <p><img data-src="imgs_tut1/pipeline9.png" class="absolute" style="left: 50px; bottom: -20px; height: 60px; "></p>
 </section>
 <section class="slide level2">
 
-<h3 class="smaller" id="overview-1">Overview</h3>
+<h3 class="smaller" id="overview">Overview</h3>
 
 <aside><div>
 <p><a href="https://mne.tools/stable/auto_tutorials/evoked/10_evoked_overview.html#similarities-among-the-core-data-structures">Similarities &amp; Differences of Core Data Classes</a></p>
 </div></aside></section>
-<section class="slide level2">
-
-<h3 class="smaller" id="overview-2">Overview</h3>
-</section>
-<section class="slide level2">
-
-<h3 class="smaller" id="overview-3">Overview</h3>
-</section>
-<section class="slide level2">
-
-<h3 class="smaller" id="overview-4">Overview</h3>
-</section>
-<section class="slide level2">
-
-<h3 class="smaller" id="overview-5">Overview</h3>
-</section>
-<section class="slide level2">
-
-<h3 class="smaller" id="overview-6">Overview</h3>
-</section>
 <section id="raw-working-wth-continuous-data" class="slide level2" data-background-opacity="0.1" data-background-iframe="https://mne.tools/stable/auto_tutorials/index.html#working-with-continuous-data" style="text-align: left; margin-top: 1em">
 <h2><a href="https://mne.tools/stable/auto_tutorials/index.html#working-with-continuous-data" data-preview-link="true" style="text-align: center">Raw: Working wth Continuous Data</a></h2>
 </section>
@@ -1337,32 +1337,32 @@
 <li>classes (CamelCase names)</li>
 <li>functions (underscore_case names)</li>
 </ul>
-<div class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1"></a><span class="im">import</span> mne</span>
-<span id="cb84-2"><a href="#cb84-2"></a><span class="im">import</span> inspect</span>
-<span id="cb84-3"><a href="#cb84-3"></a></span>
-<span id="cb84-4"><a href="#cb84-4"></a>mne.io.Raw.__dict__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="40">
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1"></a><span class="im">import</span> mne</span>
+<span id="cb85-2"><a href="#cb85-2"></a><span class="im">import</span> inspect</span>
+<span id="cb85-3"><a href="#cb85-3"></a></span>
+<span id="cb85-4"><a href="#cb85-4"></a>mne.io.Raw.__dict__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="130">
 <pre><code>mappingproxy({'__module__': 'mne.io.fiff.raw',
               '__doc__': 'Raw data in FIF format.\n\n    Parameters\n    ----------\n    fname : str | file-like\n        The raw filename to load. For files that have automatically been split,\n        the split part will be automatically loaded. Filenames not ending with\n        ``raw.fif``, ``raw_sss.fif``, ``raw_tsss.fif``, ``_meg.fif``,\n        ``_eeg.fif``,  or ``_ieeg.fif`` (with or without an optional additional\n        ``.gz`` extension) will generate a warning. If a file-like object is\n        provided, preloading must be used.\n\n        .. versionchanged:: 0.18\n           Support for file-like objects.\n    allow_maxshield : bool | str (default False)\n        If True, allow loading of data that has been recorded with internal\n        active compensation (MaxShield). Data recorded with MaxShield should\n        generally not be loaded directly, but should first be processed using\n        SSS/tSSS to remove the compensation signals that may also affect brain\n        activity. Can also be "yes" to load without eliciting a warning.\n    \n    preload : bool or str (default False)\n        Preload data into memory for data manipulation and faster indexing.\n        If True, the data will be preloaded into memory (fast, requires\n        large amount of memory). If preload is a string, preload is the\n        file name of a memory-mapped file which is used to store the data\n        on the hard drive (slower, requires less memory).\n    \n    on_split_missing : str\n        Can be ``\'raise\'`` (default) to raise an error, ``\'warn\'`` to emit a\n        warning, or ``\'ignore\'`` to ignore when split file is missing.\n    \n        .. versionadded:: 0.22\n    \n    verbose : bool | str | int | None\n        Control verbosity of the logging output. If ``None``, use the default\n        verbosity level. See the :ref:`logging documentation &lt;tut-logging&gt;` and\n        :func:`mne.verbose` for details. Should only be passed as a keyword\n        argument.\n\n    Attributes\n    ----------\n    \n    info : mne.Info\n        The :class:`mne.Info` object with information about the sensors and methods of measurement.\n    ch_names : list of string\n        List of channels\' names.\n    n_times : int\n        Total number of time points in the raw file.\n    times :  ndarray\n        Time vector in seconds. Starts from 0, independently of `first_samp`\n        value. Time interval between consecutive time samples is equal to the\n        inverse of the sampling frequency.\n    preload : bool\n        Indicates whether raw data are in memory.\n    \n    verbose : bool | str | int | None\n        Control verbosity of the logging output. If ``None``, use the default\n        verbosity level. See the :ref:`logging documentation &lt;tut-logging&gt;` and\n        :func:`mne.verbose` for details. Should only be passed as a keyword\n        argument.\n    ',
               '__init__': &lt;function mne.io.fiff.raw.__init__(self, fname, allow_maxshield=False, preload=False, on_split_missing='raise', verbose=None)&gt;,
               '_read_raw_file': &lt;function mne.io.fiff.raw._read_raw_file(self, fname, allow_maxshield, preload, do_check_ext=True, verbose=None)&gt;,
-              '_dtype': &lt;property at 0x13703c450&gt;,
+              '_dtype': &lt;property at 0x12e97c450&gt;,
               '_read_segment_file': &lt;function mne.io.fiff.raw.Raw._read_segment_file(self, data, idx, fi, start, stop, cals, mult)&gt;,
               'fix_mag_coil_types': &lt;function mne.io.fiff.raw.Raw.fix_mag_coil_types(self)&gt;,
-              'acqparser': &lt;property at 0x13703c590&gt;})</code></pre>
+              'acqparser': &lt;property at 0x12e97c590&gt;})</code></pre>
 </div>
 </div>
 </section>
 <section class="slide level2">
 
-<div class="cell" data-execution_count="26">
+<div class="cell" data-execution_count="22">
 <div class="cell-output cell-output-display">
 <p>The radius of the circle is 10.</p>
 </div>
 </div>
-<div class="cell" data-execution_count="27">
-<div class="cell-output cell-output-display" data-execution_count="42">
+<div class="cell" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="132">
 <div id="tbl-planets">
 <table>
 <caption>Table 1: Planets</caption>
