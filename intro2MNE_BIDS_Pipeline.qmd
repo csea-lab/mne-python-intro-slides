@@ -1,0 +1,751 @@
+---
+title: "MNE-BIDS-pipeline"
+format: revealjs
+execute:
+  echo: true
+  eval: false
+---
+
+# MNE-BIDS-pipeline {.smaller}
+
+1.  Prepare your dataset
+2.  Create a configuration file
+3.  Run the pipeline
+
+## Prepare your dataset
+
+MNE-BIDS-Pipeline only works with BIDS-formatted raw data. To find out more about BIDS and how to convert your data to the BIDS format, please see the documentation of MNE-BIDS.
+
+![](https://mne.tools/mne-bids/assets/MNE-BIDS.png)
+
+## Create a configuration file {.smaller}
+
+All parameters of the pipeline are controlled via a configuration file. Create a template configuration file by running the following command:
+
+`mne_bids_pipeline --create-config=/path/to/custom_config.py`
+
+```{python, eval=FALSE}
+import numpy as np
+
+study_name = "ds000247"
+bids_root = f"~/mne_data/{study_name}"
+deriv_root = f"~/mne_data/derivatives/mne-bids-pipeline/{study_name}"
+
+subjects = ["0002"]
+sessions = ["01"]
+task = "rest"
+task_is_rest = True
+
+crop_runs = (0, 100)  # to speed up computations
+
+ch_types = ["meg"]
+spatial_filter = "ssp"
+
+l_freq = 1.0
+h_freq = 40.0
+
+rest_epochs_duration = 10
+rest_epochs_overlap = 0
+
+epochs_tmin = 0
+baseline = None
+
+```
+
+-   [from example ds000247](https://mne.tools/mne-bids-pipeline/stable/examples/ds000247.html#configuration)
+
+## Run the pipeline {.smaller}
+
+To run the full pipeline, simply call:
+
+`mne_bids_pipeline --config=/path/to/your/custom_config.py`
+
+To run part of the pipeline, you can specify the stage you want to run:
+
+-   Run only the preprocessing steps:
+    -   `mne_bids_pipeline --config=/path/to/your/custom_config.py --steps=preprocessing`
+
+## Optional Parts of the pipeline {.smaller}
+
+-   Run only the sensor-level processing steps:
+    -   `mne_bids_pipeline --config=/path/to/your/custom_config.py --steps=sensor`
+-   Run only the source-level (inverse solution) processing steps:
+    -   `mne_bids_pipeline --config=/path/to/your/custom_config.py --steps=source`
+-   (Re-)run ICA:
+    -   `mne_bids_pipeline --config=/path/to/your/custom_config.py --steps=preprocessing/ica`
+-   You can also run multiple steps with one command by separating different steps by a comma. For example, to run preprocessing and sensor-level processing steps using a single command, do:
+    -   `mne_bids_pipeline --config=/path/to/your/custom_config.py --steps=preprocessing,sensor`
+
+# Running the pipeline on HiPerGator {.smaller}
+
+## Log on to HiPerGator terminal/shell {.smaller}
+
+Connect to UF Research Computing HPG3 Cluster from terminal on macOS
+
+Type the following command in the terminal:
+
+`ssh` *urgatoruser*`@hpg.rc.ufl.edu`
+
+Then, follow the prompts to enter your password and Duo two-factor authentication.
+
+**Your password will not be displayed as you type it.** Then, your terminal should look like this:
+
+``` bash
+ssh urgatoruser@hpg.rc.ufl.edu
+Password: xxxxxxxx
+Duo two-factor login for urgatoruser@ufl.edu
+
+Enter a passcode or select one of the following options:
+
+ 1. Duo Push to XXX-XXX-1809
+ 2. Phone call to XXX-XXX-1809
+
+Passcode or option (1-2): 1
+```
+
+Works through the UF Single-sign on similar to for Canvas and gatormail.
+
+## Start a compute node on HiPerGator {.smaller}
+
+-   single node 2 CPU core job with 2gb of RAM for 90 minutes can be started with the following command
+
+``` bash
+srun --account=psb4934 --qos=psb4934 --ntasks=1 --cpus-per-task=2 --mem=2gb -t 90 --pty bash -i
+```
+
+`[mygatoruser@login1 ~]$ srun --pty -p hpg2-compute -n 1 -N 1 -t 90 --mem=2gb /bin/bash`
+
+-   single node 4 CPU core job with 28gb of RAM for 120 minutes can be started with the following command
+
+``` bash
+srun --account=psb4934 --qos=psb4934 --ntasks=1 --cpus-per-task=4 --mem=28gb -t 60 --pty bash -i
+```
+
+## Check that your job is running
+
+Now you are on the compute node. You can check the hostname and the node list with the following commands:
+
+``` bash
+echo "Hello from $(hostname)"
+```
+
+`Hello from c0711a-s6.ufhpc`
+
+``` bash
+echo $SLURM_JOB_NODELIST
+```
+
+`c0711a-s6`
+
+## Activate: Conda-env for pipeline {.smaller}
+
+Navigate to group storage on Blue drive then activate conda environment to have access to pipeline
+
+``` bash
+cd /blue/akeil/share/mears/misophonia/miso-project-pipeline
+
+module load conda
+conda activate mne_v1_6
+```
+
+# `Deeper Understanding`: behind functions of the MNE-BIDS-pipeline 
+
+## Core scripts of pipeline {.smaller}
+
+::: columns
+::: {.column width="25%"}
+#### Essential Sequence
+
+-   `__init__.py`
+
+-   `_config.py`
+
+-   `_main.py`
+
+-   `_run.py`
+:::
+
+::: {.column width="35%"}
+#### Supporting Scripts
+
+-   `_config_import.py`
+-   `_config_template.py`
+-   `_config_utils.py`
+-   `_logging.py`
+-   `_parallel.py`
+-   `_io.py`
+:::
+
+::: {.column width="25%"}
+#### Specific Procedures
+
+-   `_decoding.py`
+
+-   `_reject.py`
+
+-   `_viz.py`
+
+-   `_report.py`
+
+-   `_download.py`
+
+-   `_import_data.py`
+:::
+:::
+
+## Stages / Steps
+
+-   init
+
+-   fresurfer
+
+-   preprocessing
+
+-   sensor
+
+-   source
+
+# Main Script
+
+## Imports and Definitions {.smaller}
+
+The script starts by importing necessary modules and defining some functions. This includes modules for argument parsing (`argparse`), file path handling (`pathlib`), logging, parallel processing, and specific functions from other modules within the same package (prefixed with `_`).
+
+::: {style="display: flex; position: relative;"}
+```{python, eval=FALSE}
+
+import argparse
+import pathlib
+from textwrap import dedent
+import time
+from typing import List
+from types import ModuleType, SimpleNamespace
+
+import numpy as np
+
+```
+
+```{python, eval=FALSE}
+
+from ._config_utils import _get_step_modules
+from ._config_import import _import_config
+from ._config_template import create_template_config
+from ._logging import logger, gen_log_kwargs
+from ._parallel import get_parallel_backend
+from ._run import _short_step_path
+
+```
+:::
+
+\
+`argparse` - [Good resource for understanding argparse](https://realpython.com/command-line-interfaces-python-argparse/#creating-command-line-interfaces-with-pythons-argparse)
+
+\
+
+#### `text manipulation` of
+
+#### command line input =
+
+::: {.fragment .fade-in-then-semi-out}
+### 💫*Pipeline*🧚‍♀️*magic*✨
+:::
+
+## Argument Parsing {.smaller}
+
+::: columns
+::: {.column width="50%"}
+
+The script uses the `argparse` module to define command-line arguments that control the behavior of the pipeline.
+
+-   `config`: Path to a configuration file specifying pipeline settings.
+-   `create-config`: Creates a template configuration file.
+-   `steps`: Defines specific processing steps or groups of steps to run.
+-   `root-dir`, `deriv_root`, `subject`, `session`, `task`, `run`: Specify paths and identifiers for the data to process.
+-   `n_jobs`: Number of parallel processes to execute.
+-   `interactive`, `debug`, `no-cache`: Flags for interactive mode, debugging, and disabling caching.
+:::
+
+::: {.column width="50%"}
+```{python, eval=FALSE}
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {__version__}"
+    )
+    parser.add_argument("config", nargs="?", default=None)
+    parser.add_argument(
+        "--config",
+        dest="config_switch",
+        default=None,
+        metavar="FILE",
+        help="The path of the pipeline configuration file to use.",
+    )
+    parser.add_argument(
+        "--create-config",
+        dest="create_config",
+        default=None,
+        metavar="FILE",
+        help="Create a template configuration file with the specified name. "
+        "If specified, all other parameters will be ignored.",
+    ),
+    parser.add_argument(
+        "--steps",
+        dest="steps",
+        default="all",
+        help=dedent(
+            """\
+        The processing steps to run.
+        Can either be one of the processing groups 'preprocessing', sensor',
+        'source', 'report',  or 'all',  or the name of a processing group plus
+        the desired step sans the step number and
+        filename extension, separated by a '/'. For example, to run ICA, you
+        would pass 'sensor/run_ica`. If unspecified, will run all processing
+        steps. Can also be a tuple of steps."""
+        ),
+    )
+    parser.add_argument(
+        "--root-dir",
+        dest="root_dir",
+        default=None,
+        help="BIDS root directory of the data to process.",
+    )
+    parser.add_argument(
+        "--deriv_root",
+        dest="deriv_root",
+        default=None,
+        help=dedent(
+            """\
+        The root of the derivatives directory
+        in which the pipeline will store the processing results.
+        If unspecified, this will be derivatives/mne-bids-pipeline
+        inside the BIDS root."""
+        ),
+    ),
+    parser.add_argument(
+        "--subject", dest="subject", default=None, help="The subject to process."
+    )
+    parser.add_argument(
+        "--session", dest="session", default=None, help="The session to process."
+    )
+    parser.add_argument(
+        "--task", dest="task", default=None, help="The task to process."
+    )
+    parser.add_argument("--run", dest="run", default=None, help="The run to process.")
+    parser.add_argument(
+        "--n_jobs",
+        dest="n_jobs",
+        type=int,
+        default=None,
+        help="The number of parallel processes to execute.",
+    )
+    parser.add_argument(
+        "--interactive",
+        dest="interactive",
+        action="store_true",
+        help="Enable interactive mode.",
+    )
+    parser.add_argument(
+        "--debug", dest="debug", action="store_true", help="Enable debugging on error."
+    )
+    parser.add_argument(
+        "--no-cache",
+        dest="no_cache",
+        action="store_true",
+        help="Disable caching of intermediate results.",
+    )
+    options = parser.parse_args()
+
+    if options.create_config is not None:
+        target_path = pathlib.Path(options.create_config)
+        create_template_config(target_path=target_path, overwrite=False)
+        return
+        
+```
+:::
+:::
+
+## Argument Parsing{.smaller}
+
+| Argument     | Dest     | Help                                                                                                      |
+|---------------|------------|----------------------------------------------------------------------------------------------------------|
+| `--version`       | (auto)             | version  |         | (Version information)                                                                                     |
+| `config`          | (auto)                | (Positional argument)                                                                                     |
+| `--config`        | config_switch         | The path of the pipeline configuration file to use.                                                       |
+| `--create-config` | create_config         | Create a template configuration file with the specified name. If specified, all other parameters ignored. |
+| `--steps`         | steps                      | The processing steps to run. Various options detailed in help.                                            |
+| `--root-dir`      | root_dir                  | BIDS root directory of the data to process.                                                               |
+| `--deriv_root`    | deriv_root            | Root of the derivatives directory to store the processing results.                                        |
+| `--subject`       | subject                  | The subject to process.                                                                                   |
+| `--session`       | session                   | The session to process.                                                                                   |
+| `--task`          | task                    | The task to process.                                                                                      |
+
+## Argument Parsing{.smaller}
+
+| Argument          | Dest           | Action   | Help                                                                                                      |
+|-------------------|----------------|----------|----------------------------------------------------------------------------------------------------------|
+| `--run`           | run              |             | The run to process.                                                                                       |
+| `--n_jobs`        | n_jobs        |            | The number of parallel processes to execute.                                                              |
+| `--interactive`   | interactive      | store_true   | Enable interactive mode.                                                                                  |
+| `--debug`         | debug           | store_true    | Enable debugging on error.                                                                                |
+| `--no-cache`      | no_cache        | store_true       | Disable caching of intermediate results.                                                                  |
+
+
+- The `dest` column represents the name of the attribute under which the argument's value will be stored. If not specified, default is long option name (w/out the initial `--`).
+- The `default` column shows the default value for the argument.
+- The `type` column lists the data type that argparse will try to convert the argument value to. If not specified, it defaults to `str`.
+- The `action` column specifies action to be taken when argument is encountered.
+- The `help` column contains a brief description of what the argument does. In this table, detailed descriptions are summarized or indicated in parentheses.
+- The `metavar` column indicates how argument is provided to help message.
+
+## Argument Validation {.smaller}
+
+The script checks if the provided arguments are valid, particularly focusing on the configuration file.
+
+```{python, eval=FALSE}
+
+     options = parser.parse_args()
+
+    if options.create_config is not None:
+        target_path = pathlib.Path(options.create_config)
+        create_template_config(target_path=target_path, overwrite=False)
+        return
+
+    config = options.config
+    config_switch = options.config_switch
+    bad = False
+    if config is None:
+        if config_switch is None:
+            bad = "neither was provided"
+        else:
+            config = config_switch
+    elif config_switch is not None:
+        bad = "both were provided"
+    if bad:
+        parser.error(
+            "❌ You must specify a configuration file either as a single "
+            f"argument or with --config, but {bad}."
+        )
+    steps = options.steps
+    root_dir = options.root_dir
+    deriv_root = options.deriv_root
+    subject, session = options.subject, options.session
+    task, run = options.task, options.run
+    n_jobs = options.n_jobs
+    interactive, debug = options.interactive, options.debug
+    cache = not options.no_cache
+
+    if isinstance(steps, str) and "," in steps:
+        # Work around limitation in Fire: --steps=foo,bar/baz won't produce a
+        # tuple ('foo', 'bar/baz'), but a string 'foo,bar/baz'.
+        steps = tuple(steps.split(","))
+    elif isinstance(steps, str):
+        steps = (steps,)
+
+    on_error = "debug" if debug else None
+    cache = "1" if cache else "0"
+
+    processing_stages = []
+    processing_steps = []
+    for steps_ in steps:
+        if "/" in steps_:
+            stage, step = steps_.split("/")
+            processing_stages.append(stage)
+            processing_steps.append(step)
+        else:
+            # User specified "sensor", "preprocessing" or similar, but without
+            # any further grouping.
+            processing_stages.append(steps_)
+            processing_steps.append(None)
+
+```
+
+## Processing Steps Identification {.smaller}
+
+Based on the `steps` argument, the script identifies which processing steps or stages are to be executed. It does this by parsing the `steps` argument and mapping them to corresponding modules.
+
+```{python, eval=FALSE}
+
+
+    step_modules: List[ModuleType] = []
+    STEP_MODULES = _get_step_modules()
+    for stage, step in zip(processing_stages, processing_steps):
+        if stage not in STEP_MODULES.keys():
+            raise ValueError(
+                f"Invalid step requested: '{stage}'. "
+                f"It should be one of {list(STEP_MODULES.keys())}."
+            )
+
+        if step is None:
+            # User specified `sensors`, `source`, or similar
+            step_modules.extend(STEP_MODULES[stage])
+        else:
+            # User specified 'stage/step'
+            for step_module in STEP_MODULES[stage]:
+                step_name = pathlib.Path(step_module.__file__).name
+                if step in step_name:
+                    step_modules.append(step_module)
+                    break
+            else:
+                # We've iterated over all steps, but none matched!
+                raise ValueError(f"Invalid steps requested: {stage}/{step}")
+
+    if processing_stages[0] != "all":
+        # Always run the directory initialization steps, but skip for 'all',
+        # because it already includes them – and we want to avoid running
+        # them twice.
+        step_modules = [*STEP_MODULES["init"], *step_modules]
+
+
+```
+
+## Configuration Loading and Overrides {.smaller}
+
+The script loads the pipeline configuration from the specified file and applies any overrides from the command-line arguments.
+
+
+```{python, eval=FALSE}
+
+     options = parser.parse_args()
+
+    if options.create_config is not None:
+        target_path = pathlib.Path(options.create_config)
+        create_template_config(target_path=target_path, overwrite=False)
+        return
+
+    config = options.config
+    config_switch = options.config_switch
+    bad = False
+    if config is None:
+        if config_switch is None:
+            bad = "neither was provided"
+        else:
+            config = config_switch
+    elif config_switch is not None:
+        bad = "both were provided"
+    if bad:
+        parser.error(
+            "❌ You must specify a configuration file either as a single "
+            f"argument or with --config, but {bad}."
+        )
+    steps = options.steps
+    root_dir = options.root_dir
+    deriv_root = options.deriv_root
+    subject, session = options.subject, options.session
+    task, run = options.task, options.run
+    n_jobs = options.n_jobs
+    interactive, debug = options.interactive, options.debug
+    cache = not options.no_cache
+
+    if isinstance(steps, str) and "," in steps:
+        # Work around limitation in Fire: --steps=foo,bar/baz won't produce a
+        # tuple ('foo', 'bar/baz'), but a string 'foo,bar/baz'.
+        steps = tuple(steps.split(","))
+    elif isinstance(steps, str):
+        steps = (steps,)
+
+    on_error = "debug" if debug else None
+    cache = "1" if cache else "0"
+
+    processing_stages = []
+    processing_steps = []
+    for steps_ in steps:
+        if "/" in steps_:
+            stage, step = steps_.split("/")
+            processing_stages.append(stage)
+            processing_steps.append(step)
+        else:
+            # User specified "sensor", "preprocessing" or similar, but without
+            # any further grouping.
+            processing_stages.append(steps_)
+            processing_steps.append(None)
+
+    config_path = pathlib.Path(config).expanduser().resolve(strict=True)
+    overrides = SimpleNamespace()
+    if root_dir:
+        overrides.bids_root = pathlib.Path(root_dir).expanduser().resolve(strict=True)
+    if deriv_root:
+        overrides.deriv_root = (
+            pathlib.Path(deriv_root).expanduser().resolve(strict=False)
+        )
+    if subject:
+        overrides.subjects = [subject]
+    if session:
+        overrides.sessions = [session]
+    if task:
+        overrides.task = task
+    if run:
+        overrides.runs = run
+    if interactive:
+        overrides.interactive = interactive
+    if n_jobs:
+        overrides.n_jobs = int(n_jobs)
+    if on_error:
+        overrides.on_error = on_error
+    if not cache:
+        overrides.memory_location = False
+
+```
+
+
+## Pipeline Execution {.smaller}
+
+-   The script iterates over the identified processing steps.
+-   For each step, it logs the start, executes the main function of the corresponding module (which is where the actual processing happens), and then logs the time taken for the step.
+-   This execution can be parallelized based on the `n_jobs` argument.
+
+```{python, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE, results='hide', cache=FALSE, fig.width=6, fig.height=4}
+
+    # Initialize dask now
+    with get_parallel_backend(config_imported.exec_params):
+        pass
+    del __mne_bids_pipeline_step__
+    logger.end()
+
+
+    for step_module in step_modules:
+        start = time.time()
+        step = _short_step_path(pathlib.Path(step_module.__file__))
+        logger.title(title=f"{step}")
+        step_module.main(config=config_imported)
+        elapsed = time.time() - start
+        hours, remainder = divmod(elapsed, 3600)
+        hours = int(hours)
+        minutes, seconds = divmod(remainder, 60)
+        minutes = int(minutes)
+        seconds = int(np.ceil(seconds))  # always take full seconds
+        elapsed = f"{seconds}s"
+        if minutes:
+            elapsed = f"{minutes}m {elapsed}"
+        if hours:
+            elapsed = f"{hours}h {elapsed}"
+        logger.end(f"done ({elapsed})")
+
+```
+
+## Logging and Error Handling {.smaller}
+
+Throughout its execution, the script logs various messages, including errors and execution time for each step. The `--debug` option enables additional debugging information on error.
+
+```{python, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE, results='hide', cache=FALSE, fig.width=6, fig.height=4}
+
+    interactive, debug = options.interactive, options.debug
+    cache = not options.no_cache
+
+    if isinstance(steps, str) and "," in steps:
+        # Work around limitation in Fire: --steps=foo,bar/baz won't produce a
+        # tuple ('foo', 'bar/baz'), but a string 'foo,bar/baz'.
+        steps = tuple(steps.split(","))
+    elif isinstance(steps, str):
+        steps = (steps,)
+
+    on_error = "debug" if debug else None
+    cache = "1" if cache else "0"
+
+```
+
+## Pipeline Configuration and Modular Design {.smaller}
+
+The script is designed to be modular, where each step in the pipeline is encapsulated in a separate module. The pipeline's behavior is controlled by a configuration file, allowing for flexible and customizable data processing.
+
+
+
+## Interactive and Cache Options {.smaller}
+
+
+The script supports interactive mode and can disable caching of intermediate results, providing flexibility for different use cases.
+
+```{python, eval=FALSE}
+
+    interactive, debug = options.interactive, options.debug
+    cache = not options.no_cache
+
+    if isinstance(steps, str) and "," in steps:
+        # Work around limitation in Fire: --steps=foo,bar/baz won't produce a
+        # tuple ('foo', 'bar/baz'), but a string 'foo,bar/baz'.
+        steps = tuple(steps.split(","))
+    elif isinstance(steps, str):
+        steps = (steps,)
+
+    on_error = "debug" if debug else None
+    cache = "1" if cache else "0"
+
+```
+
+
+## Overriding Configuration Options {.smaller}
+
+The script allows for overriding configuration options from the command line, providing flexibility for different use cases.
+
+```{python, eval=FALSE}
+   
+    config_path = pathlib.Path(config).expanduser().resolve(strict=True)
+    overrides = SimpleNamespace()
+    if root_dir:
+        overrides.bids_root = pathlib.Path(root_dir).expanduser().resolve(strict=True)
+    if deriv_root:
+        overrides.deriv_root = (
+            pathlib.Path(deriv_root).expanduser().resolve(strict=False)
+        )
+    if subject:
+        overrides.subjects = [subject]
+    if session:
+        overrides.sessions = [session]
+    if task:
+        overrides.task = task
+    if run:
+        overrides.runs = run
+    if interactive:
+        overrides.interactive = interactive
+    if n_jobs:
+        overrides.n_jobs = int(n_jobs)
+    if on_error:
+        overrides.on_error = on_error
+    if not cache:
+        overrides.memory_location = False
+
+```
+
+## Summary
+
+Overall, the script is a command-line interface for a data processing pipeline, where the specific processing steps are modularized and controlled via a configuration file. The use of command-line arguments allows for flexible execution of different parts of the pipeline.
+
+# Configuration
+
+## Configuration File {.smaller}
+
+The configuration file is a Python file that contains a dictionary with the configuration parameters. The configuration file is used to control the behavior of the pipeline. It is passed to the pipeline script via the `--config` argument.
+
+```{python, eval=FALSE}
+import numpy as np
+
+
+study_name = "ds000247"
+bids_root = f"~/mne_data/{study_name}"
+deriv_root = f"~/mne_data/derivatives/mne-bids-pipeline/{study_name}"
+
+subjects = ["0002"]
+sessions = ["01"]
+task = "rest"
+task_is_rest = True
+
+crop_runs = (0, 100)  # to speed up computations
+
+ch_types = ["meg"]
+spatial_filter = "ssp"
+
+l_freq = 1.0
+h_freq = 40.0
+
+rest_epochs_duration = 10
+rest_epochs_overlap = 0
+
+epochs_tmin = 0
+baseline = None
+
+```
+
+-   [from example ds000247](https://mne.tools/mne-bids-pipeline/stable/examples/ds000247.html#configuration)
+
+## Configuration Parameters {.smaller}
+
+## 
